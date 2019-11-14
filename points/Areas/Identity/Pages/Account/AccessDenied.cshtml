@@ -1,10 +1,26 @@
 ﻿@page
 @model AccessDeniedModel
 @{
-    ViewData["Title"] = "Access denied";
+    ViewData["Title"] = "لايمكن الوصول";
 }
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">You do not have access to this resource.</p>
-</header>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card m-5">
+        <div class="card-body text-center">
+            <header>
+                <h1 class="text-danger">@ViewData["Title"]</h1>
+                <p class="text-danger">لايوجد عندك تصريح</p>
+            </header>
+        </div>
+        <div class="card-footer">
+            <a asp-action="index" asp-controller="home" class="btn btn-default">
+                الرجوع للقائمة الرئيسية
+            </a>
+        </div>
+
+    </div>
+</section>

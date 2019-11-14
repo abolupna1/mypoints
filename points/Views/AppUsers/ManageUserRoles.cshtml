@@ -1,0 +1,87 @@
+﻿@model List<points.ModelViews.AppUsers.AppUserRolesViewModel>
+
+@{
+    var userId = ViewBag.userId;
+    var email = ViewBag.email;
+}
+
+<section class="content-header">
+
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">المستخدمين</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                    <li class="breadcrumb-item "><a asp-controller="AppUsers" asp-action="Index">المستخدمين</a> </li>
+                    <li class="breadcrumb-item "><a asp-controller="AppUsers" asp-action="Edit" asp-route-id="@userId">تعديل مستخدم</a> </li>
+                    <li class="breadcrumb-item active">  ادارة الأدوار </li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+
+
+<section class="content">
+
+    <div class="card">
+    
+            <form method="post">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>ادارة الأدوار</h2>
+                    </div>
+                    <div class="card-body">
+
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            if (email == "abolupna1@gmail.com" && i == 0)
+                            {
+                                <div class="form-check m-1" hidden>
+                                    <input type="hidden" asp-for="@Model[i].RoleId" />
+                                    <input type="hidden" asp-for="@Model[i].RoleName" />
+                                    <input asp-for="@Model[i].IsSelected" class="form-check-input" />
+                                    <label class="form-check-label" asp-for="@Model[i].IsSelected">
+                                        @Model[i].RoleArName
+                                    </label>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-check m-1">
+                                    <input type="hidden" asp-for="@Model[i].RoleId" />
+                                    <input type="hidden" asp-for="@Model[i].RoleName" />
+                                    <input asp-for="@Model[i].IsSelected" class="form-check-input" />
+                                    <label class="form-check-label" asp-for="@Model[i].IsSelected">
+                                        @Model[i].RoleArName
+                                    </label>
+                                </div>
+                            }
+
+                        }
+                        <div asp-validation-summary="All" class="text-danger"></div>
+
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" value="تحديث" class="btn btn-primary"
+                               style="width:auto" />
+                        <a asp-action="EditUser" asp-route-id="@userId"
+                           class="btn btn-default" style="width:auto">الغاء</a>
+                    </div>
+                </div>
+            </form>
+
+   
+    </div>
+    <!-- /.card -->
+
+</section>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,55 @@
+﻿
+
+@{
+    ViewData["Title"] = "مستخدم جديد";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>الرئيسية</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item "><a asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                    <li class="breadcrumb-item "><a asp-controller="AppUsers" asp-action="Index">المستخدمين</a></li>
+                    <li class="breadcrumb-item active">مستخدم جديد</li>
+
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-user-plus"></i>
+                مستخدم جديد
+            </h3>
+            <a asp-action="Create" class="btn  btn-primary  btn-sm text-white float-left m-0">
+                <i class="fas fa-plus-circle"></i>
+                مستخدم جديد
+            </a>
+        </div>
+
+        <!-- /.card-body -->
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,131 @@
+﻿@model IEnumerable<points.Models.Unit>
+
+
+
+@{
+    ViewData["Title"] = "الوحدات";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>الرئيسية</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item "><a asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                    <li class="breadcrumb-item active"> الوحدات </li>
+
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-list-alt"></i>
+                الوحدات
+            </h3>
+            <a asp-action="Create" class="btn  btn-primary  btn-sm text-white float-left m-0">
+                <i class="fas fa-plus-circle"></i>
+                اضافة وحدة
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table tab-content table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Department)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Section)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            int i = 1;
+
+                            @foreach (var item in Model)
+                            {
+                        <tr>
+                            <th>@i</th>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Department.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Section.Name)
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" type="button" class="btn btn-success ml-1">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+
+                                    <form asp-action="Delete" asp-route-id="@item.Id">
+                                        <span id="confirmDeleteSpan_@item.Id" style="display:none">
+                                            <span>هل تريد الحذف ؟</span>
+                                            <button type="submit" class="btn btn-danger">نعم</button>
+                                            <a href="#" class="btn btn-primary"
+                                               onclick="confirmDelete('@item.Id', false)">لا</a>
+                                        </span>
+                                        <span id="deleteSpan_@item.Id">
+                                            <a href="#" class="btn btn-danger"
+                                               onclick="confirmDelete('@item.Id', true)">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </span>
+                                    </form>
+
+
+
+
+
+
+
+                                </div>
+                            </td>
+                        </tr>
+                                i++;
+                            }
+                        }
+                        else
+                        {
+                            <tr class="text-center">
+                                <td colspan="5">لاتوجد بيانات</td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+        <!-- /.card-body -->
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->

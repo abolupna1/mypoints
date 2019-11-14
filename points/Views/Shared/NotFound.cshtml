@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewData["Title"] = "غير موجود";
+  
+}
+
+
+<section class="content-header">
+
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">غير موجود</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                    <li class="breadcrumb-item active"> غير موجود</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+
+
+
+<section class="content">
+
+    <div class="card">
+        <div class="card-header ">
+            <h3 class="card-title">غير موجود</h3>
+
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+
+          
+                <h2 class="headline text-warning"> 404</h2>
+                @if (@ViewBag.ErrorMessage!=null)
+                {
+                    <div class="error-content">
+                        <h3>
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+
+                            @ViewBag.ErrorMessage
+                        </h3>
+                    </div>
+                }
+ 
+                    <!-- /.error-content -->
+                </div>
+
+     
+        <!-- /.card-body -->
+
+        <div class="card-footer">
+            <a asp-action="index" asp-controller="home" class="btn btn-default">
+                الرجوع للقائمة الرئيسية
+            </a>
+        </div>
+    </div>
+    <!-- /.card -->
+</section>
+
+

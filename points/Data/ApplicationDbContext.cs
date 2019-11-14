@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -18,12 +19,18 @@ namespace points.Data
         {
         }
 
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Section> Sections { get; set; }
+        public DbSet<Unit> Units { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+          
 
-
+         
 
             builder.Entity<AppUserRole>(
 
@@ -48,5 +55,7 @@ namespace points.Data
         }
 
 
+
+      
     }
 }

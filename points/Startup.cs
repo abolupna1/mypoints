@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using points.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using points.Data.Repositories;
 
 namespace points
 {
@@ -55,7 +56,7 @@ namespace points
             .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
+            services.AddScoped<IPointsRepository, PointsRepository>();
             services.AddMvc(options => {
                 var policy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
