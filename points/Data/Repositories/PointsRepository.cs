@@ -36,9 +36,13 @@ namespace points.Data.Repositories
             return await _context.Departments.ToListAsync();
         }
 
-        public Task<Employee> GetEmployee(int id)
+        public async Task<Employee> GetEmployee(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Employees
+               .Include(d => d.Department)
+               .Include(s => s.Section)
+               .Include(u => u.Unit)
+               .SingleOrDefaultAsync(e=>e.Id==id);
         }
 
         public async Task<IEnumerable<Employee>> GetEmployees()
@@ -94,6 +98,12 @@ namespace points.Data.Repositories
         public async Task<bool> IsEmployeeNomberInUse(int employeeNomber)
         {
             return await _context.Employees.AnyAsync(e=>e.EmployeeNo == employeeNomber);
+        }
+
+        public async Task<bool> IsEmployeeNomberInUseForEdit(int EmployeeNo, int id)
+        {
+            return await _context.Employees.AnyAsync(e => e.EmployeeNo == EmployeeNo && e.Id != id);
+
         }
 
         public async Task<bool> SavaAll()

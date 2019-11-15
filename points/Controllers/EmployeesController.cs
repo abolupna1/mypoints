@@ -1,14 +1,15 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using points.Data;
+
 using points.Data.Repositories;
 using points.Models;
+using points.ModelViews.Employees;
 
 namespace points.Controllers
 {
@@ -17,15 +18,52 @@ namespace points.Controllers
     public class EmployeesController : Controller
     {
         private readonly IPointsRepository _repository;
+        private readonly IMapper _mapper;
 
-        public EmployeesController(IPointsRepository repository)
+        public EmployeesController(IPointsRepository repository,IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
+        [AcceptVerbs("Get", "Post")]
+        [Route("IsEmployeeNomberInUse")]
+        public async Task<IActionResult> IsEmployeeNomberInUse(int EmployeeNo)
+        {
+          
+
+            if (await _repository.IsEmployeeNomberInUse(EmployeeNo))
+            {
+                return Json($"رقم الموظف {EmployeeNo} موجود مسبقا");
+
+            }
+            else
+            {
+                return Json(true);
+
+            }
+          
+        }
+        [AcceptVerbs("Get", "Post")]
+        [Route("IsEmployeeNomberInUseForEdit")]
+        public async Task<IActionResult> IsEmployeeNomberInUseForEdit(int EmployeeNo ,int Id)
+        {
 
 
+            if (await _repository.IsEmployeeNomberInUseForEdit(EmployeeNo,Id))
+            {
+                return Json($"رقم الموظف {EmployeeNo} موجود مسبقا");
 
+            }
+            else
+            {
+                return Json(true);
+
+            }
+
+        }
+
+        
 
         public async Task<IActionResult> Index()
         {
@@ -36,6 +74,8 @@ namespace points.Controllers
         public IActionResult Create()
         {
             ViewData["DepartmentId"] = new SelectList(_repository.GetDepartments().Result, "Id", "Name");
+            ViewData["SectionId"] = new SelectList(_repository.GetDepartments().Result, "Id", "Name");
+            ViewData["UnitId"] = new SelectList(_repository.GetDepartments().Result, "Id", "Name");
             return View();
         }
 
@@ -43,15 +83,24 @@ namespace points.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Create")]
-        public async Task<IActionResult> Create([Bind("Id,Name,EmployeeNo,Mobile,JopType,JopName,DepartmentId,SectionId,UnitId")] Employee employee)
+        public async Task<IActionResult> Create(EmployeeCreateViewModel employee)
         {
             if (ModelState.IsValid)
             {
-                _repository.Add<Employee>(employee);
+                if (await _repository.IsEmployeeNomberInUse(employee.EmployeeNo))
+                {
+                    ViewData["DepartmentId"] = new SelectList(_repository.GetDepartments().Result, "Id", "Name", employee.DepartmentId);
+                    ViewBag.errormessage = $"رقم الوظف {employee.EmployeeNo} موجود مسبقا";
+                    return View(employee);
+                }
+                var employeeMapper = _mapper.Map<Employee>(employee);
+                _repository.Add<Employee>(employeeMapper);
                 await _repository.SavaAll();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DepartmentId"] = new SelectList(_repository.GetDepartments().Result, "Id", "Name", employee.DepartmentId);
+            ViewData["SectionId"] = new SelectList(_repository.GetDepartments().Result, "Id", "Name",employee.SectionId);
+            ViewData["UnitId"] = new SelectList(_repository.GetDepartments().Result, "Id", "Name",employee.UnitId);
             return View(employee);
         }
 
@@ -60,25 +109,28 @@ namespace points.Controllers
         {
 
 
-            var section = await _repository.GetSection(id);
-            if (section == null)
+            var employee = await _repository.GetEmployee(id);
+            if (employee == null)
             {
                 ViewBag.ErrorMessage = "لايوجد   بيانات";
                 return View("NotFound");
             }
-            ViewData["DepartmentId"] = new SelectList(_repository.GetDepartments().Result, "Id", "Name", section.DepartmentId);
 
+            ViewData["DepartmentId"] = new SelectList(_repository.GetDepartments().Result, "Id", "Name", employee.DepartmentId);
+            ViewData["SectionId"] = new SelectList(_repository.GetDepartments().Result, "Id", "Name", employee.SectionId);
+            ViewData["UnitId"] = new SelectList(_repository.GetDepartments().Result, "Id", "Name", employee.UnitId);
+            var employeeMapper = _mapper.Map<EmployeeEditViewModel>(employee);
 
-            return View(section);
+            return View(employeeMapper);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Edit/{id:int}")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DepartmentId")] Section section)
+        public async Task<IActionResult> Edit(int id, EmployeeEditViewModel employee)
         {
-            if (id != section.Id)
+            if (id != employee.Id)
             {
                 ViewBag.ErrorMessage = "لايوجد   بيانات";
                 return View("NotFound");
@@ -88,13 +140,15 @@ namespace points.Controllers
             {
                 try
                 {
-                    _repository.Update<Section>(section);
+                    var employeeMapper = _mapper.Map<Employee>(employee);
+
+                    _repository.Update<Employee>(employeeMapper);
                     await _repository.SavaAll();
 
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (_repository.GetSection(section.Id) == null)
+                    if (_repository.GetEmployee(employee.Id) == null)
                     {
                         ViewBag.ErrorMessage = "لايوجد   بيانات";
                         return View("NotFound");
@@ -106,9 +160,11 @@ namespace points.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentId"] = new SelectList(_repository.GetDepartments().Result, "Id", "Name", section.Id);
 
-            return View(section);
+            ViewData["DepartmentId"] = new SelectList(_repository.GetDepartments().Result, "Id", "Name", employee.DepartmentId);
+            ViewData["SectionId"] = new SelectList(_repository.GetDepartments().Result, "Id", "Name", employee.SectionId);
+            ViewData["UnitId"] = new SelectList(_repository.GetDepartments().Result, "Id", "Name", employee.UnitId);
+            return View(employee);
         }
 
 
@@ -117,8 +173,8 @@ namespace points.Controllers
         [Route("Delete/{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var section = await _repository.GetSection(id);
-            if (section == null)
+            var employee = await _repository.GetEmployee(id);
+            if (employee == null)
             {
                 ViewBag.ErrorMessage = "لايوجد   بيانات";
                 return View("NotFound");
@@ -126,14 +182,14 @@ namespace points.Controllers
 
             try
             {
-                _repository.Delete<Section>(section);
+                _repository.Delete<Employee>(employee);
                 await _repository.SavaAll();
 
 
             }
             catch (DbUpdateConcurrencyException)
             {
-                ViewBag.ErrorMessage = "توجد حقول مرتبطة بهذا القسم / الرجاء حذف جميع الحقول المرتبطة من ثم  يمكن حذف القسم";
+                ViewBag.ErrorMessage = $"توجد حقول مرتبطة بهذا الموظف /{employee.Name} الرجاء حذف جميع الحقول المرتبطة من ثم  يمكن حذف الموظف";
                 return View("NotFound");
 
 

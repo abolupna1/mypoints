@@ -32,6 +32,10 @@ namespace points.Data.Repositories
 
         Task<Employee> GetEmployee(int id);
         Task<bool> IsEmployeeNomberInUse(int employeeNomber);
+        Task<bool> IsEmployeeNomberInUseForEdit(int EmployeeNo, int id);
+
+        
+
 
     }
 }

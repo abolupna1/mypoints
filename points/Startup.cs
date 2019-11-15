@@ -17,6 +17,7 @@ using points.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using points.Data.Repositories;
+using AutoMapper;
 
 namespace points
 {
@@ -53,9 +54,10 @@ namespace points
 
 
             })
+                
             .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
+            services.AddAutoMapper();
             services.AddScoped<IPointsRepository, PointsRepository>();
             services.AddMvc(options => {
                 var policy = new AuthorizationPolicyBuilder()
