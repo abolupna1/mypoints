@@ -25,6 +25,14 @@
     <Compile Remove="Migrations\20191114004202_setNullSection.Designer.cs" />
     <Compile Remove="Migrations\20191114004549_setNullSection.cs" />
     <Compile Remove="Migrations\20191114004549_setNullSection.Designer.cs" />
+    <Compile Remove="Migrations\20191115152921_TimesOfEvaluationAndPerformance.cs" />
+    <Compile Remove="Migrations\20191115152921_TimesOfEvaluationAndPerformance.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\lib\datepicker\datepicker-ar.js" />
+    <None Include="wwwroot\lib\datepicker\hijricalendar.js" />
+    <None Include="wwwroot\lib\datepicker\jquery-ui.min.js" />
   </ItemGroup>
 
 

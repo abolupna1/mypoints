@@ -69,6 +69,16 @@ namespace points.Data.Repositories
             return await _context.Sections.Where(d => d.DepartmentId == id).ToListAsync();
         }
 
+        public async  Task<TimesOfEvaluationAndPerformance> GetTimesOfEvaluationAndPerformance(int id)
+        {
+            return await _context.TimesOfEvaluationAndPerformances.SingleOrDefaultAsync(t=>t.Id==id);
+        }
+
+        public async Task<IEnumerable<TimesOfEvaluationAndPerformance>> GetTimesOfEvaluationAndPerformances()
+        {
+            return await _context.TimesOfEvaluationAndPerformances.ToListAsync();
+        }
+
         public async Task<Unit> GetUnit(int id)
         {
             return await _context.Units.Include(d=>d.Department)

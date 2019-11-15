@@ -29,12 +29,13 @@ namespace points.Data.Repositories
         Task<Unit> GetUnit(int id);
 
         Task<IEnumerable<Employee>> GetEmployees();
-
         Task<Employee> GetEmployee(int id);
         Task<bool> IsEmployeeNomberInUse(int employeeNomber);
         Task<bool> IsEmployeeNomberInUseForEdit(int EmployeeNo, int id);
 
-        
+        Task<IEnumerable<TimesOfEvaluationAndPerformance>> GetTimesOfEvaluationAndPerformances();
+        Task<TimesOfEvaluationAndPerformance> GetTimesOfEvaluationAndPerformance(int id);
+
 
 
     }

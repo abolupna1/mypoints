@@ -11,13 +11,16 @@
         <link href="~/css/adminlte.min.css" rel="stylesheet" />
         <link href="~/css/bootstrap-rtl.min.css" rel="stylesheet" />
         <link href="~/css/custom-style.css" rel="stylesheet" />
+        <link href="~/lib/datepicker/jquery-ui.css" rel="stylesheet" />
     </environment>
     <environment exclude="Development">
         <link href="~/lib/fontawesome/css/all.min.css" rel="stylesheet" />
         <link href="~/css/ionicons.min.css" rel="stylesheet" />
         <link href="~/css/adminlte.min.css" rel="stylesheet" />
         <link href="~/css/bootstrap-rtl.min.css" rel="stylesheet" />
+
         <link href="~/css/custom-style.css" rel="stylesheet" />
+        <link href="~/lib/datepicker/jquery-ui.css" rel="stylesheet" />
     </environment>
   
 </head>
@@ -93,7 +96,7 @@
                         <nav class="mt-2">
                             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                                 <!-- Add icons to the links using the .nav-icon class
-                                with font-awesome or any other icon font library -->
+    with font-awesome or any other icon font library -->
                                 <li class="nav-item has-treeview">
                                     <a href="#" class="nav-link active">
                                         <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -139,10 +142,19 @@
                                                 <p>الموظفين</p>
                                             </a>
                                         </li>
+
                                     </ul>
-                                    
+
+                                </li>
+                                <li class="nav-header">الأداء والتقييم</li>
+                                <li class="nav-item">
+                                    <a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Index" class="nav-link">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+                                        <p>أوقات التقييم</p>
+                                    </a>
                                 </li>
                             </ul>
+                          
                         </nav>
                         <!-- /.sidebar-menu -->
                     </div>
@@ -177,6 +189,8 @@
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
         <script src="~/lib/slimScroll/jquery.slimscroll.min.js"></script>
         <script src="~/lib/fastclick/fastclick.min.js"></script>
+        <script src="~/lib/datepicker/jquery-ui.min.js"></script>
+        <script src="~/lib/datepicker/datepicker-ar.js"></script>
         <script src="~/js/adminlte.min.js"></script>
     </environment>
     <environment exclude="Development">
@@ -184,6 +198,8 @@
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
         <script src="~/lib/slimScroll/jquery.slimscroll.min.js"></script>
         <script src="~/lib/fastclick/fastclick.min.js"></script>
+        <script src="~/lib/datepicker/jquery-ui.min.js"></script>
+        <script src="~/lib/datepicker/datepicker-ar.js"></script>
         <script src="~/js/adminlte.min.js"></script>
     </environment>
     <script src="~/js/CustomScript.js"></script>
