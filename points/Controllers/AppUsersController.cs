@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using points.Data;
+using points.Data.Repositories;
 using points.Models;
 using points.ModelViews.AppUsers;
 
@@ -23,16 +24,18 @@ namespace points.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ILogger<AppUsersController> _logger;
         private readonly RoleManager<AppRole> _roleManager;
+        private readonly IPointsRepository _repository;
         public AppUsersController(ApplicationDbContext context,
             UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
             ILogger<AppUsersController> logger ,
-             RoleManager<AppRole> roleManager)
+             RoleManager<AppRole> roleManager, IPointsRepository repository)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
            _logger = logger;
             _roleManager = roleManager;
+            _repository = repository;
         }
 
       
@@ -139,7 +142,8 @@ namespace points.Controllers
                 FullName = appUser.FullName,
                 Email = appUser.Email,
                 Id = appUser.Id,
-                Roles = userRoles
+                Roles = userRoles,
+                Departments = { }
             };
             return View(usertoedit);
          
@@ -293,6 +297,83 @@ namespace points.Controllers
         }
 
 
+
+        [HttpGet]
+        [Route("ManageUserDepartments/{userId:int}")]
+        public async Task<IActionResult> ManageUserDepartments(int userId)
+        {
+            ViewBag.userId = userId;
+
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"المستخدم  = {userId} غير موجود";
+                return View("NotFound");
+            }
+            var model = new List<AppUserDepartmentsViewModel>();
+           
+            foreach (var depart in await _repository.GetDepartments())
+            {
+                var userDepartmentsViewModel = new AppUserDepartmentsViewModel
+                {
+                  DepartmntId=depart.Id,
+                  DepartmntName=depart.Name
+                };
+
+                if (await _repository.IsUserHasThisDepartment(user.Id, depart.Id))
+                {
+                    userDepartmentsViewModel.IsSelected = true;
+                }
+                else
+                {
+                    userDepartmentsViewModel.IsSelected = false;
+                }
+
+                model.Add(userDepartmentsViewModel);
+            }
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        [Route("ManageUserDepartments/{userId:int}")]
+        public async Task<IActionResult> ManageUserDepartments(int userId, List<AppUserDepartmentsViewModel> models)
+        {
+            ViewBag.userId = userId;
+
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"المستخدم  = {userId} غير موجود";
+                return View("NotFound");
+            }
+            if (await _repository.GetAppUserDepartmentsByUserId(user.Id) != null)
+            {
+                foreach (var depart in await _repository.GetAppUserDepartmentsByUserId(user.Id))
+                {
+                    _repository.Delete<AppUserDepartment>(depart);
+
+                }
+                await _repository.SavaAll();
+            }
       
+            foreach (var dept in models)
+            {
+               var model = new AppUserDepartment()
+                {
+                   DepartmentId=dept.DepartmntId,
+                   UserId=userId
+                };
+                _repository.Add<AppUserDepartment>(model);
+            }
+
+            await _repository.SavaAll();
+
+            return View(models);
+        }
+
     }
 }

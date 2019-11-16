@@ -1,0 +1,144 @@
+﻿@model points.Models.TimesOfEvaluationAndPerformance
+
+@{
+    ViewData["Title"] = "تفاصيل";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .callout {
+  
+    border-right: 5px solid #eee;
+}
+    .callout.callout-info {
+    border-right-color: #117a8b;
+}
+</style>
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>أوقات التقييم والأداء</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item "><a asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                    <li class="breadcrumb-item "><a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Index">أوقات التقييم والأداء</a></li>
+                    <li class="breadcrumb-item active">      تفاصيل وقت التقييم والأداء </li>
+
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="callout callout-info">
+        <h5><i class="fas fa-calendar-alt"></i>  @Html.DisplayFor(model => model.Title):</h5>
+        @Html.DisplayNameFor(model => model.FromDate) :  <strong>@Model.FromDate.ToString("  dd-MM-yyyy  ") </strong>
+
+    @Html.DisplayNameFor(model => model.ToDate) :   <strong>  @Model.ToDate.ToString("  dd-MM-yyyy  ")</strong>
+
+    ( @Html.DisplayNameFor(model => model.Status) :
+    @if (@Model.Status)
+    {
+        <span>منشور</span>
+    }
+    else
+    {
+        <span>مؤرشف</span>
+    }
+    )
+</div>
+  
+
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title"> الأداء والإنجاز : وكالة الجودة</h3>
+
+        </div>
+        <div class="card-body" >
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12 order-2 order-md-1">
+                    <div class="row">
+                        <div class="col-12 col-sm-4">
+                            <div class="info-box bg-light">
+                                <div class="info-box-content">
+                                    <span class="info-box-text text-center text-muted">جميع الأعمال </span>
+                                    <span class="info-box-number text-center text-muted mb-0">2300</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="info-box bg-light">
+                                <div class="info-box-content">
+                                    <span class="info-box-text text-center text-muted">الأعمال الغير منجزة </span>
+                                    <span class="info-box-number text-center text-muted mb-0">2000</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-4">
+                            <div class="info-box bg-light">
+                                <div class="info-box-content">
+                                    <span class="info-box-text text-center text-muted">الأعمال  المنجزة </span>
+                                    <span class="info-box-number text-center text-muted mb-0">2000</span>
+                                </div>
+                            </div>
+                        </div>
+
+                       
+                        <div class="col-md-12 mt-3">
+                            <p class="text-center">
+                                <strong>	سرعة اداء الأعمال </strong>
+                            </p>
+
+                            <div class="progress-group">
+                                <span class="progress-text">سريع</span>
+                                <span class="float-left"><b>160</b>/200</span>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-success" style="width: 80%"></div>
+                                </div>
+                            </div>
+                            <!-- /.progress-group -->
+
+                            <div class="progress-group">
+                                <span class="progress-text">متوسط</span>
+                                <span class="float-left"><b>310</b>/400</span>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-warning" style="width: 75%"></div>
+                                </div>
+                            </div>
+
+                            <!-- /.progress-group -->
+                            <div class="progress-group">
+                                <span class="progress-text">بطيئ</span>
+                                <span class="float-left"><b>480</b>/800</span>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-danger" style="width: 60%"></div>
+                                </div>
+                            </div>
+
+                   
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+
+</section>
+<!-- /.content -->
+
+
+
+
+
+
+

@@ -10,5 +10,6 @@ namespace points.Models
     {
         public string FullName { get; set; }
         public ICollection<AppUserRole> UserRoles { get; set; }
+        public ICollection<AppUserDepartment> UserDepatrments { get; set; }
     }
 }

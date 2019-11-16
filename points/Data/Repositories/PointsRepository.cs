@@ -17,6 +17,7 @@ namespace points.Data.Repositories
         }
         public void Add<T>(T entity) where T : class
         {
+            
             _context.Add(entity);
         }
 
@@ -24,6 +25,12 @@ namespace points.Data.Repositories
         {
             _context.Remove(entity);
         }
+
+        public async Task<IEnumerable<AppUserDepartment>> GetAppUserDepartmentsByUserId(int userId)
+        {
+            return await _context.AppUserDepartments.Where(d => d.UserId == userId).ToListAsync();
+        }
+
 
         public async Task<Department> GetDepartment(int id)
         {
@@ -35,6 +42,8 @@ namespace points.Data.Repositories
         {
             return await _context.Departments.ToListAsync();
         }
+
+     
 
         public async Task<Employee> GetEmployee(int id)
         {
@@ -114,6 +123,11 @@ namespace points.Data.Repositories
         {
             return await _context.Employees.AnyAsync(e => e.EmployeeNo == EmployeeNo && e.Id != id);
 
+        }
+
+        public async Task<bool> IsUserHasThisDepartment(int userId, int deartmentid)
+        {
+            return await _context.AppUserDepartments.AnyAsync(d=>d.DepartmentId == deartmentid && d.UserId == userId);
         }
 
         public async Task<bool> SavaAll()

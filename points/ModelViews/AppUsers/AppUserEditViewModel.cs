@@ -11,6 +11,7 @@ namespace points.ModelViews.AppUsers
         {
 
             Roles = new List<string>();
+            Departments = new List<string>();
         }
 
         public int Id { get; set; }
@@ -29,5 +30,8 @@ namespace points.ModelViews.AppUsers
         public string FullName { get; set; }
 
         public IList<string> Roles { get; set; }
+        public IList<string> Departments { get; set; }
+
+        
     }
 }

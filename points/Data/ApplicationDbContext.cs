@@ -25,13 +25,26 @@ namespace points.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<TimesOfEvaluationAndPerformance> TimesOfEvaluationAndPerformances { get; set; }
 
-        
+        public DbSet<AppUserDepartment> AppUserDepartments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-          
 
-         
+
+            builder.Entity<AppUserDepartment>()
+              .HasKey(t => new { t.Id, t.UserId, t.DepartmentId });
+
+            builder.Entity<AppUserDepartment>()
+                .HasOne(pt => pt.User)
+                .WithMany(p => p.UserDepatrments)
+                .HasForeignKey(pt => pt.UserId);
+
+            builder.Entity<AppUserDepartment>()
+                .HasOne(pt => pt.Department)
+                .WithMany(p => p.UserDepatrments)
+                .HasForeignKey(pt => pt.DepartmentId);
+
 
             builder.Entity<AppUserRole>(
 
@@ -49,14 +62,16 @@ namespace points.Data
 
                 );
 
+         
+
+
+    
 
 
 
-
-        }
-
+    }
 
 
-      
+
     }
 }

@@ -36,7 +36,10 @@ namespace points.Data.Repositories
         Task<IEnumerable<TimesOfEvaluationAndPerformance>> GetTimesOfEvaluationAndPerformances();
         Task<TimesOfEvaluationAndPerformance> GetTimesOfEvaluationAndPerformance(int id);
 
+        Task<bool> IsUserHasThisDepartment(int userId,int deartmentid);
+        Task<IEnumerable<AppUserDepartment>> GetAppUserDepartmentsByUserId(int userId);
 
+        
 
     }
 }

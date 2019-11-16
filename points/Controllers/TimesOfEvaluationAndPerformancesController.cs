@@ -31,6 +31,21 @@ namespace points.Controllers
             return View(await _repository.GetTimesOfEvaluationAndPerformances());
         }
 
+        [Route("Details/{id:int}")]
+        public async Task<IActionResult> Details(int id)
+        {
+
+
+            var timesOf = await _repository.GetTimesOfEvaluationAndPerformance(id);
+            if (timesOf == null)
+            {
+                ViewBag.ErrorMessage = "لايوجد   بيانات";
+                return View("NotFound");
+            }
+
+            return View(timesOf);
+        }
+
         [Route("Create")]
         public IActionResult Create()
         {

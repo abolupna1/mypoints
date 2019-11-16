@@ -18,6 +18,7 @@ namespace points.Models
         public IEnumerable<Unit> Units { get; set; }
         public IEnumerable<Employee> Employees { get; set; }
 
+        public ICollection<AppUserDepartment> UserDepatrments { get; set; }
 
     }
 }
