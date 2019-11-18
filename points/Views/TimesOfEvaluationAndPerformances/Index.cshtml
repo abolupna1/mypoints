@@ -12,12 +12,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>أوقات التقييم والأداء</h1>
+                <h1>دورة قياس الأداء</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-left">
                     <li class="breadcrumb-item "><a asp-controller="Home" asp-action="Index">الرئيسية</a></li>
-                    <li class="breadcrumb-item active">أوقات التقييم والأداء</li>
+                    <li class="breadcrumb-item active">دورة قياس الأداء</li>
 
                 </ol>
             </div>
@@ -33,11 +33,11 @@
         <div class="card-header">
             <h3 class="card-title">
                 <i class="fas fa-calendar-alt"></i>
-                أوقات التقييم والأداء
+                دورة قياس الأداء
             </h3>
             <a asp-action="Create" class="btn  btn-primary  btn-sm text-white float-left m-0">
                 <i class="fas fa-plus-circle"></i>
-                اضافة وقت للتقييم والأداء
+                اضافة دورة لقياس الأداء
             </a>
         </div>
         <div class="card-body">
@@ -94,8 +94,8 @@
 
                             <td>
                                 <div class="btn-group">
-                                    <a asp-action="Employees" asp-route-id="@item.Id" type="button" class="btn btn-primary ml-1">
-                                        <i class="fas fa-users-cog"></i>
+                                    <a asp-action="Departments" asp-route-timesOfEvaluationAndPerformanceId="@item.Id"  type="button" class="btn btn-primary ml-1" data-toggle="tooltip" data-placement="top" title="الوكالات / الإدارات">
+                                        <i class="fas fa-list-ol"></i>
                                     </a>
 
                                     <a asp-action="Details" asp-route-id="@item.Id" type="button" class="btn btn-info ml-1">

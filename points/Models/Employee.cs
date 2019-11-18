@@ -43,5 +43,9 @@ namespace points.Models
         public int? UnitId { get; set; } = null;
         [Display(Name = "الوحدة"), ForeignKey("UnitId")]
         public Unit Unit { get; set; }
+
+
+
+        public IEnumerable<BusinessAndAchievement> BusinessAndAchievements { get; set; }
     }
 }

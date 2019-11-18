@@ -1,0 +1,157 @@
+﻿@model points.ModelViews.BusinessAndAchievements.AchieveAllBusinessModelView
+@{
+    ViewData["Title"] = "انجاز  الأعمال";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var departmentId = @ViewBag.departmentId;
+    var timesOfEvaluationAndPerformanceId = @ViewBag.timesOfEvaluationAndPerformanceId;
+    var employeeId = @ViewBag.employeeId;
+    var employeeName = @ViewBag.employeeName;
+}
+
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>الأعمال</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item "><a asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                    <li class="breadcrumb-item "><a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Index">دورة قياس الأداء </a></li>
+                    <li class="breadcrumb-item "><a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Departments" asp-route-timesOfEvaluationAndPerformanceId="@ViewBag.timesOfEvaluationAndPerformanceId">الوكالات - الإدارات</a></li>
+                    <li class="breadcrumb-item ">
+                        <a asp-controller="BusinessAndAchievements" asp-action="Employees"
+                           asp-route-departmentId="@departmentId"
+                           asp-route-timesOfEvaluationAndPerformanceId="@timesOfEvaluationAndPerformanceId"> الموظفين </a>
+                    </li>
+                    <li class="breadcrumb-item ">
+                        <a asp-controller="BusinessAndAchievements"
+                           asp-action="WorksByEmployee" asp-route-employeeId="@employeeId"
+                           asp-route-timesOfEvaluationAndPerformanceId="@timesOfEvaluationAndPerformanceId">
+                            @employeeName
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        انجاز الأعمال
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+
+
+
+<section class="content">
+    <form asp-action="AchieveSingleBusiness">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-hourglass-end"></i>
+                    انجاز الأعمال
+                </h3>
+
+            </div>
+
+            <div class="card-body">
+                @if (ViewBag.errorMessage != null)
+                {
+                    <div class="alert alert-danger">
+                        @ViewBag.errorMessage
+                    </div>
+                }
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+             
+
+                    <div class="form-group">
+                        <input hidden asp-for="Id" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input hidden asp-for="EmployeeId" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input hidden asp-for="TimesOfEvaluationAndPerformanceId" class="form-control">
+                    </div>
+                    <div class="form-row bg-light">
+                        <div class="form-group col-md-9">
+                            <label asp-for="TheWork" class="control-label"></label>
+                            <input readonly asp-for="TheWork" class="form-control" />
+                            <span asp-validation-for="TheWork" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label asp-for="WorkDate" class="control-label"></label>
+                            <input readonly asp-for="WorkDate" id="WorkDate" type="text" class="form-control" />
+                            <span asp-validation-for="WorkDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label asp-for="TheWorkDescription" class="control-label"></label>
+                            <textarea readonly asp-for="TheWorkDescription" class="form-control"></textarea>
+                            <span asp-validation-for="TheWorkDescription" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label asp-for="Status" class="control-label"></label>
+                            <select asp-for="Status" class="form-control">
+                                <option value="">الرجاء الإختيار</option>
+                                <option value="1">منتهي</option>
+                                <option value="2">مؤجل</option>
+                                <option value="3">ملغي</option>
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label asp-for="QuicklyPerformTheTask" class="control-label"></label>
+                            <select asp-for="QuicklyPerformTheTask" class="form-control">
+                                <option value="0">الرجاء الإختيار</option>
+                                <option value="1">بطيئ</option>
+                                <option value="2">متوسط</option>
+                                <option value="3">سريع</option>
+                            </select>
+                            <span asp-validation-for="QuicklyPerformTheTask" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label asp-for="NotesForWorkDelayed" class="control-label"></label>
+                            <textarea asp-for="NotesForWorkDelayed" class="form-control"></textarea>
+                            <span asp-validation-for="NotesForWorkDelayed" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label asp-for="Notes" class="control-label"></label>
+                            <textarea asp-for="Notes" class="form-control"></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                   
+                
+
+
+
+            </div>
+            <div class="card-footer">
+                <div class="form-group">
+                    <input type="submit" value="حفظ" class="btn btn-primary" />
+                </div>
+            </div>
+
+        </div>
+    </form>
+</section>
+
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+
+
+}
+

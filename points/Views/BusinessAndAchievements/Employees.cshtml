@@ -1,0 +1,221 @@
+﻿@model IEnumerable<points.Models.Employee>
+
+@{
+    ViewData["Title"] = "الموظفين";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <style>
+        .callout {
+            border-right: 5px solid #eee;
+        }
+
+            .callout.callout-info {
+                border-right-color: #117a8b;
+            }
+    </style>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>الموظفين</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item "><a asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                    <li class="breadcrumb-item "><a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Index">دورة قياس الأداء </a></li>
+                    <li class="breadcrumb-item "><a asp-controller="TimesOfEvaluationAndPerformances"
+                                                    asp-action="Departments" 
+                                              
+                                                    asp-route-timesOfEvaluationAndPerformanceId="@ViewBag.timesOfEvaluationAndPerformanceId">الوكالات - الإدارات</a></li>
+                    <li class="breadcrumb-item active">
+                        @ViewBag.department
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    @if (Model.Any())
+    {
+        int i = 1;
+
+        <div class="row">
+
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-user-tie"></i>
+                                @item.Name
+                            </h3>
+
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="callout callout-info col-12">
+
+                                    @if (item.SectionId != null)
+
+                                    {<strong>القسم :</strong> <em>@item.Section.Name</em>}
+
+                                    @if (item.UnitId != null)
+
+                                    {<strong>الوحدة :</strong> <em>@item.Unit.Name</em>}
+                                    <strong>رقم الموظف :</strong>  <em>@item.EmployeeNo</em>
+                                    <strong>الوظيفة :</strong>  <em>@item.JopName</em>
+
+
+                                </div>
+                                <div class="col-12 col-md-12 col-lg-12 order-2 order-md-1">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-4">
+                                            <div class="info-box bg-light">
+                                                <div class="info-box-content">
+                                                    <span class="info-box-text text-center text-muted">جميع الأعمال </span>
+                                                    <span class="info-box-number text-center text-muted mb-0">2300</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="info-box bg-light">
+                                                <div class="info-box-content">
+                                                    <span class="info-box-text text-center text-muted">الأعمال الغير منجزة </span>
+                                                    <span class="info-box-number text-center text-muted mb-0">2000</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-sm-4">
+                                            <div class="info-box bg-light">
+                                                <div class="info-box-content">
+                                                    <span class="info-box-text text-center text-muted">الأعمال  المنجزة </span>
+                                                    <span class="info-box-number text-center text-muted mb-0">2000</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-6 mt-3">
+                                            <p class="text-center">
+                                                <strong>	سرعة اداء الأعمال </strong>
+                                            </p>
+
+                                            <div class="progress-group mb-5">
+                                                <span class="progress-text">سريع</span>
+                                                <span class="float-left"><b>160</b>/200</span>
+                                                <div class="progress progress-sm">
+                                                    <div class="progress-bar bg-success" style="width: 80%"></div>
+                                                </div>
+                                            </div>
+                                            <!-- /.progress-group -->
+
+                                            <div class="progress-group mb-5">
+                                                <span class="progress-text">متوسط</span>
+                                                <span class="float-left"><b>310</b>/400</span>
+                                                <div class="progress progress-sm">
+                                                    <div class="progress-bar bg-warning" style="width: 75%"></div>
+                                                </div>
+                                            </div>
+
+                                            <!-- /.progress-group -->
+                                            <div class="progress-group">
+                                                <span class="progress-text">بطيئ</span>
+                                                <span class="float-left"><b>480</b>/800</span>
+                                                <div class="progress progress-sm">
+                                                    <div class="progress-bar bg-danger" style="width: 60%"></div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col-lg-6 mt-3">
+
+                                            <div class="col-12">
+                                                <div class="info-box">
+                                                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-chalkboard-teacher"></i></span>
+
+                                                    <div class="info-box-content">
+                                                        <span class="info-box-text">الدورات التدريبية</span>
+                                                        <span class="info-box-number">
+                                                            10
+                                                        </span>
+                                                    </div>
+                                                    <!-- /.info-box-content -->
+                                                </div>
+                                                <!-- /.info-box -->
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="info-box">
+                                                    <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-bullhorn"></i></span>
+
+                                                    <div class="info-box-content">
+                                                        <span class="info-box-text">مناسبات العمادة</span>
+                                                        <span class="info-box-number">
+                                                            10
+                                                            <small>%</small>
+                                                        </span>
+                                                    </div>
+                                                    <!-- /.info-box-content -->
+                                                </div>
+                                                <!-- /.info-box -->
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="info-box">
+                                                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-fingerprint"></i></span>
+
+                                                    <div class="info-box-content">
+                                                        <span class="info-box-text">التقييم</span>
+                                                        <span class="info-box-number">
+                                                            10
+                                                            <small>%</small>
+                                                        </span>
+                                                    </div>
+                                                    <!-- /.info-box-content -->
+                                                </div>
+                                                <!-- /.info-box -->
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <a asp-controller="BusinessAndAchievements" asp-action="WorksByEmployee"  
+                               asp-route-employeeId="@item.Id"
+                               asp-route-timesOfEvaluationAndPerformanceId="@ViewBag.timesOfEvaluationAndPerformanceId"
+                               class="btn btn-primary text-white">الأعمال</a>
+                        </div>
+                    </div>
+
+                </div>
+                i++;
+
+            }
+
+        </div>
+    }
+    else
+    {
+<div class="callout callout-warning col-12">
+    <h5><i class="fas fa-users"></i> 
+    لايوجد موظفين
+    </h5>
+
+
+
+</div>
+    }
+
+</section>
+<!-- /.content -->

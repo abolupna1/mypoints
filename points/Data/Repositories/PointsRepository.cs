@@ -28,9 +28,23 @@ namespace points.Data.Repositories
 
         public async Task<IEnumerable<AppUserDepartment>> GetAppUserDepartmentsByUserId(int userId)
         {
-            return await _context.AppUserDepartments.Where(d => d.UserId == userId).ToListAsync();
+            return await _context.AppUserDepartments.Where(d => d.UserId == userId).Include(d=>d.Department).ToListAsync();
         }
 
+        public async Task<BusinessAndAchievement> GetBusinessAndAchievement(int id)
+        {
+            return await _context.BusinessAndAchievements
+                .Include(e=>e.Employee).ThenInclude(d=>d.Department)
+                .SingleOrDefaultAsync(d=>d.Id==id);
+        }
+
+        public async Task<IEnumerable<BusinessAndAchievement>> GetBusinessAndAchievementByEmployeeIdAndTimeOfId(int employeeId, int timesOfEvaluationAndPerformanceId)
+        {
+            return await _context.BusinessAndAchievements
+                .Where(e => e.EmployeeId == employeeId 
+                && e.TimesOfEvaluationAndPerformanceId == timesOfEvaluationAndPerformanceId)
+                .ToListAsync();
+        }
 
         public async Task<Department> GetDepartment(int id)
         {
@@ -51,6 +65,7 @@ namespace points.Data.Repositories
                .Include(d => d.Department)
                .Include(s => s.Section)
                .Include(u => u.Unit)
+               .Include(e=>e.BusinessAndAchievements)
                .SingleOrDefaultAsync(e=>e.Id==id);
         }
 
@@ -60,6 +75,13 @@ namespace points.Data.Repositories
                 .Include(d => d.Department)
                 .Include(s=>s.Section)
                 .Include(u=>u.Unit)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Employee>> GetEmployeesByDpartmentId(int deprtmintId)
+        {
+            return await _context.Employees.Where(d => d.DepartmentId == deprtmintId)
+                .Include(s=>s.Section).Include(u=>u.Unit).Include(d=>d.Department)
                 .ToListAsync();
         }
 
@@ -112,6 +134,13 @@ namespace points.Data.Repositories
             {
                 return await _context.Units.Where(u => u.SectionId == sectionId && u.DepartmentId == departmentId).ToListAsync();
             }
+        }
+
+        public async Task<IEnumerable<BusinessAndAchievement>> GetWorksByEmployeeIdAndTimesOf(int employeeId, int timesOfEvaluationAndPerformanceId)
+        {
+            return await _context.BusinessAndAchievements
+                .Where(d => d.EmployeeId == employeeId &&  d.TimesOfEvaluationAndPerformanceId == timesOfEvaluationAndPerformanceId)
+                .ToListAsync();
         }
 
         public async Task<bool> IsEmployeeNomberInUse(int employeeNomber)

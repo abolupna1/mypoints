@@ -135,7 +135,11 @@ namespace points.Controllers
             }
             // GetRolesAsync returns the list of user Roles
             var userRoles = GetRolesAr(appUser.Id).Result;
-
+            List<string> departmentsName = new List<string>();
+            foreach (var depart in await _repository.GetAppUserDepartmentsByUserId(appUser.Id))
+            {
+                departmentsName.Add(depart.Department.Name);
+            }
 
             var usertoedit = new AppUserEditViewModel()
             {
@@ -143,7 +147,7 @@ namespace points.Controllers
                 Email = appUser.Email,
                 Id = appUser.Id,
                 Roles = userRoles,
-                Departments = { }
+                Departments = departmentsName
             };
             return View(usertoedit);
          
@@ -350,9 +354,10 @@ namespace points.Controllers
                 ViewBag.ErrorMessage = $"المستخدم  = {userId} غير موجود";
                 return View("NotFound");
             }
-            if (await _repository.GetAppUserDepartmentsByUserId(user.Id) != null)
+            var depts = await _repository.GetAppUserDepartmentsByUserId(user.Id);
+            if (depts.Count()>0)
             {
-                foreach (var depart in await _repository.GetAppUserDepartmentsByUserId(user.Id))
+                foreach (var depart in depts)
                 {
                     _repository.Delete<AppUserDepartment>(depart);
 
@@ -362,17 +367,21 @@ namespace points.Controllers
       
             foreach (var dept in models)
             {
-               var model = new AppUserDepartment()
+                if (dept.IsSelected)
                 {
-                   DepartmentId=dept.DepartmntId,
-                   UserId=userId
-                };
-                _repository.Add<AppUserDepartment>(model);
+                    var model = new AppUserDepartment()
+                    {
+                        DepartmentId = dept.DepartmntId,
+                        UserId = userId
+                    };
+                    _repository.Add<AppUserDepartment>(model);
+                }
+            
             }
 
             await _repository.SavaAll();
 
-            return View(models);
+            return RedirectToAction("Edit", new { id = userId });
         }
 
     }

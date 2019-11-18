@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ using points.Models;
 namespace points.Controllers
 {
     [Route("TimesOfEvaluationAndPerformances")]
-    [Authorize(Roles = "Admin")]
+    
     public class TimesOfEvaluationAndPerformancesController : Controller
     {
         private readonly IPointsRepository _repository;
@@ -23,12 +24,27 @@ namespace points.Controllers
             _repository = repository;
         }
 
-
+        
 
 
         public async Task<IActionResult> Index()
         {
             return View(await _repository.GetTimesOfEvaluationAndPerformances());
+        }
+
+        [Route("Departments/{timesOfEvaluationAndPerformanceId:int}")]
+        public async Task<IActionResult> Departments(int timesOfEvaluationAndPerformanceId)
+        {
+            var timesOf = await _repository.GetTimesOfEvaluationAndPerformance(timesOfEvaluationAndPerformanceId);
+            if (timesOf == null)
+            {
+                ViewBag.ErrorMessage = "لايوجد   بيانات";
+                return View("NotFound");
+            }
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var departments = await _repository.GetAppUserDepartmentsByUserId(userId);
+            ViewBag.timesOfEvaluationAndPerformanceId = timesOfEvaluationAndPerformanceId;
+            return View(departments);
         }
 
         [Route("Details/{id:int}")]

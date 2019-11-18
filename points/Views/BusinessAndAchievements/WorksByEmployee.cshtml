@@ -1,0 +1,245 @@
+﻿@model IEnumerable<points.Models.BusinessAndAchievement>
+
+@{
+    ViewData["Title"] = "WorksByEmployee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int employeeId = 0;
+    if (Model.Any())
+    {
+        employeeId = Model.FirstOrDefault().EmployeeId;
+    }
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>الأعمال</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item "><a asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                    <li class="breadcrumb-item "><a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Index">دورة قياس الأداء </a></li>
+                    <li class="breadcrumb-item "><a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Departments"
+                                                    asp-route-timesOfEvaluationAndPerformanceId="@ViewBag.timesOfEvaluationAndPerformanceId">الوكالات - الإدارات</a></li>
+                    <li class="breadcrumb-item ">
+                        <a asp-controller="BusinessAndAchievements" asp-action="Employees"
+                           asp-route-departmentId="@ViewBag.departmentId"
+                           asp-route-timesOfEvaluationAndPerformanceId="@ViewBag.timesOfEvaluationAndPerformanceId"> الموظفين </a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        @if (ViewBag.employeeName != null)
+                        {
+                            <span> @ViewBag.employeeName</span>
+                        }
+                    </li>
+                  
+
+                   
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-th-list"></i>
+                الأعمال
+            </h3>
+            @if (Model.Any())
+            {
+                <a class="float-left btn btn-success mr-2 text-white"
+                   asp-action="AchieveAllBusiness" 
+                   asp-route-employeeId="@employeeId"
+                   asp-route-timesOfEvaluationAndPerformanceId="@ViewBag.timesOfEvaluationAndPerformanceId">
+                    <i class="fas fa-trophy"></i>
+                </a>
+            }
+
+            <form asp-action="CreateGet" asp-controller="BusinessAndAchievements" class="float-left">
+                <span id="confirmDeleteSpan_9000" style="display:none">
+                    <span>عدد الأعمال ؟</span>
+                    <div class="btn-group">
+                        <input hidden type="hidden" value="@ViewBag.timesOfEvaluationAndPerformanceId" name="timesOfEvaluationAndPerformanceId" />
+                        <input hidden type="hidden" value="@ViewBag.departmentId" name="departmentId" />
+                        <input class="form-control" min="1" type="number" name="countCreate" />
+                        <input type="hidden" hidden value="@ViewBag.employeeId" name="employeeId" />
+
+                        <button type="submit" class="btn btn-primary">اضف</button>
+                        <a href="#" class="btn btn-danger"
+                           onclick="confirmDelete('9000', false)">الغاء</a>
+                    </div>
+                </span>
+                <span id="deleteSpan_9">
+                    <a href="#" class="btn btn-primary"
+                       onclick="confirmDelete('9000', true)">
+                        <i class="fas fa-plus-circle"></i>
+                    </a>
+                </span>
+            </form>
+
+
+
+
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table tab-content table-striped table-bordered table-hover">
+                    <thead>
+                        <tr class="text-center">
+                            <th>#</th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.TheWork)
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.WorkDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Status)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.QuicklyPerformTheTask)
+                            </th>
+                            <th>
+                                النقاط
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            int i = 1;
+
+                            @foreach (var item in Model)
+                            {
+                        <tr class="text-center">
+                            <th>@i</th>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TheWork)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.WorkDate)
+                            </td>
+                            <td>
+                                @if (item.Status == null)
+                                {
+                                    <span>مستمر</span>
+                                }
+                                else if (item.Status == 1)
+                                {
+                                    <span>منتهي</span>
+
+                                }
+                                else if (item.Status == 2)
+                                {
+                                    <span>مؤجل</span>
+
+                                }
+                                else
+                                {
+                                    <span>ملغي</span>
+
+                                }
+
+                            </td>
+                            <td>
+                                @if (item.QuicklyPerformTheTask == null )
+                                {
+                                  
+                                }
+                                else if (item.QuicklyPerformTheTask == 1)
+                                {
+                                    <span class="text-danger">بطيئ</span>
+
+                                }
+                                else if (item.QuicklyPerformTheTask == 2)
+                                {
+                                    <span class="text-info">متوسط</span>
+
+                                }
+                                else
+                                {
+                                    <span class="text-success">سريع</span>
+
+                                }
+                            </td>
+
+                            <td>
+                               @if (item.QuicklyPerformTheTask == null)
+                               {
+                                   <span>0</span>
+                               }
+                               else
+                               {
+                                   <span>@item.QuicklyPerformTheTask</span>
+                               }
+
+                            </td>
+
+                            <td>
+                                <div class="btn-group">
+                                    <a class="float-left btn btn-primary ml-2 text-white"
+                                       asp-action="AchieveSingleBusiness"
+                                       asp-route-id="@item.Id">
+                                        <i class="fas fa-trophy"></i>
+                                    </a>
+                                    @if (item.Status == null)
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" type="button" class="btn btn-success ml-1">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    }
+
+
+                                    <form asp-action="Delete" asp-route-id="@item.Id">
+                                        <span id="confirmDeleteSpan_@item.Id" style="display:none">
+                                            <span>هل تريد الحذف ؟</span>
+                                            <button type="submit" class="btn btn-danger">نعم</button>
+                                            <a href="#" class="btn btn-primary"
+                                               onclick="confirmDelete('@item.Id', false)">لا</a>
+                                        </span>
+                                        <span id="deleteSpan_@item.Id">
+                                            <a href="#" class="btn btn-danger"
+                                               onclick="confirmDelete('@item.Id', true)">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </span>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                                i++;
+                            }
+                        }
+                        else
+                        {
+                            <tr class="text-center">
+                                <td colspan="8">لاتوجد بيانات</td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+        <!-- /.card-body -->
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
+
+

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using points.Models;
+using points.ModelViews.BusinessAndAchievements;
 using points.ModelViews.Employees;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,11 @@ namespace points.Helpers
         {
             CreateMap<Employee, EmployeeCreateViewModel>().ReverseMap();
             CreateMap<Employee, EmployeeEditViewModel>().ReverseMap();
+            CreateMap<BusinessAndAchievement, BusinessAndAchievementCreateModelView>().ReverseMap();
+            CreateMap<BusinessAndAchievement, BusinessAndAchievementEditModelView>().ReverseMap();
+            CreateMap<BusinessAndAchievement, AchieveAllBusinessModelView>().ReverseMap();
 
-
+            
 
         }
     }

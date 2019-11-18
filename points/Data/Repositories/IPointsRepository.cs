@@ -17,6 +17,7 @@ namespace points.Data.Repositories
         Task<IEnumerable<Department>> GetDepartments();
        
         Task<Department> GetDepartment(int id);
+      
 
         Task<IEnumerable<Section>> GetSections();
 
@@ -29,6 +30,7 @@ namespace points.Data.Repositories
         Task<Unit> GetUnit(int id);
 
         Task<IEnumerable<Employee>> GetEmployees();
+        Task<IEnumerable<Employee>> GetEmployeesByDpartmentId(int dartmintId);
         Task<Employee> GetEmployee(int id);
         Task<bool> IsEmployeeNomberInUse(int employeeNomber);
         Task<bool> IsEmployeeNomberInUseForEdit(int EmployeeNo, int id);
@@ -39,7 +41,9 @@ namespace points.Data.Repositories
         Task<bool> IsUserHasThisDepartment(int userId,int deartmentid);
         Task<IEnumerable<AppUserDepartment>> GetAppUserDepartmentsByUserId(int userId);
 
-        
 
+        Task<IEnumerable<BusinessAndAchievement>> GetWorksByEmployeeIdAndTimesOf(int employeeId,int timesOfEvaluationAndPerformanceId);
+        Task<BusinessAndAchievement> GetBusinessAndAchievement(int id);
+        Task<IEnumerable<BusinessAndAchievement>> GetBusinessAndAchievementByEmployeeIdAndTimeOfId(int employeeId,int timesOfEvaluationAndPerformanceId);
     }
 }
