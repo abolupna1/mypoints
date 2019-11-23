@@ -1,0 +1,141 @@
+﻿@model IList<Evaluation>
+
+@{
+    ViewData["Title"] = " اضافة تقييم  ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var departmentId = @ViewBag.departmentId;
+    var timesOfEvaluationAndPerformanceId = @ViewBag.timesOfEvaluationAndPerformanceId;
+    var employeeId = @ViewBag.employeeId;
+    var employeeName = @ViewBag.employeeName; 
+    
+   
+
+}
+
+@{ 
+    var evaluationCriteria = ViewBag.evaluationCriteria as IEnumerable<points.Models.EvaluationCriteria>;
+
+}
+
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1> التقييم </h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-left">
+                        <li class="breadcrumb-item "><a asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                        <li class="breadcrumb-item "><a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Index">دورة قياس الأداء </a></li>
+                        <li class="breadcrumb-item "><a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Departments" asp-route-timesOfEvaluationAndPerformanceId="@ViewBag.timesOfEvaluationAndPerformanceId">الوكالات - الإدارات</a></li>
+                        <li class="breadcrumb-item ">
+                            <a asp-controller="BusinessAndAchievements" asp-action="Employees"
+                               asp-route-departmentId="@departmentId"
+                               asp-route-timesOfEvaluationAndPerformanceId="@timesOfEvaluationAndPerformanceId"> الموظفين </a>
+                        </li>
+                        <li class="breadcrumb-item ">
+                            <a asp-controller="BusinessAndAchievements"
+                               asp-action="WorksByEmployee" asp-route-employeeId="@employeeId"
+                               asp-route-timesOfEvaluationAndPerformanceId="@timesOfEvaluationAndPerformanceId">
+                                @employeeName
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item ">
+                            <a asp-controller="Evaluations"
+                               asp-action="EmployeeEvaluationsInThisSicle" asp-route-employeeId="@employeeId"
+                               asp-route-timeOfId="@timesOfEvaluationAndPerformanceId">
+                                التقييم
+                            </a>
+                        </li>
+
+                        <li class="breadcrumb-item active">
+                            اضافة تقييم
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-plus-circle"></i>
+                    اضافة تقييم
+                </h3>
+
+
+
+
+            </div>
+            <div class="card-body">
+
+                <form asp-action="Create">
+                    @for (int i = 0; i < evaluationCriteria.Count(); i++)
+                    {
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group" hidden>
+                            <label hidden asp-for="@Model[i].EmployeeId" class="control-label"></label>
+                            <input type="hidden" hidden asp-for="@Model[i].EmployeeId" class="form-control" value="@employeeId">
+                        </div>
+                        <div class="form-group" hidden>
+                            <label hidden asp-for="@Model[i].TimesOfEvaluationAndPerformanceId" class="control-label"></label>
+                            <input type="hidden" hidden asp-for="@Model[i].TimesOfEvaluationAndPerformanceId" class="form-control" value="@timesOfEvaluationAndPerformanceId">
+                        </div>
+
+
+                        <div class="form-group">
+                            <label asp-for="@Model[i].EvaluationCriteriaId" class="control-label"></label>
+                            <input  type="hidden" hidden asp-for="@Model[i].EvaluationCriteriaId" value="@evaluationCriteria.ToList()[i].Id" class="form-control" />
+                            <input readonly value="@evaluationCriteria.ToList()[i].CriteriaName" class="form-control" />
+                            <span asp-validation-for="@Model[i].EvaluationCriteriaId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model[i].Degree" class="control-label">
+                                النقاط (1- @evaluationCriteria.ToList()[i].Degree)
+                            </label>
+                            <input asp-for="@Model[i].Degree" min="1" max="@evaluationCriteria.ToList()[i].Degree" class="form-control" />
+                            <span asp-validation-for="@Model[i].Degree" class="text-danger"></span>
+                        </div>
+
+                    }
+                    <div class="form-group">
+                        <input type="submit" value="حفظ" class="btn btn-primary" />
+                    </div>
+                </form>
+
+
+            </div>
+
+            <!-- /.card-body -->
+            <!-- /.card-footer-->
+        </div>
+        <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+        <script>
+
+            $(document).ready(function () {
+                $("#OccasionDate").datepicker();
+
+            });
+        </script>
+    }
+
+
+
+
+

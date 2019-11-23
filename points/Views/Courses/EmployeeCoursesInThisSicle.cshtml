@@ -1,24 +1,35 @@
-﻿@model IEnumerable<points.Models.TimesOfEvaluationAndPerformance>
-
+﻿@model IEnumerable<Course>
 @{
-    ViewData["Title"] = "أوقات التقييم والأداء";
+    ViewData["Title"] = "الدورات التدريبية  ";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var departmentId = @ViewBag.departmentId;
+    var timesOfEvaluationAndPerformanceId = @ViewBag.timesOfEvaluationAndPerformanceId;
+    var employeeId = @ViewBag.employeeId;
+    var employeeName = @ViewBag.employeeName;
 }
 
 
-
-<!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>دورة قياس الأداء</h1>
+                <h1>الدورات التدريبية</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-left">
                     <li class="breadcrumb-item "><a asp-controller="Home" asp-action="Index">الرئيسية</a></li>
-                    <li class="breadcrumb-item active">دورة قياس الأداء</li>
+                    <li class="breadcrumb-item "><a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Index">دورة قياس الأداء </a></li>
+                    <li class="breadcrumb-item "><a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Departments" asp-route-timesOfEvaluationAndPerformanceId="@ViewBag.timesOfEvaluationAndPerformanceId">الوكالات - الإدارات</a></li>
+                    <li class="breadcrumb-item ">
+                        <a asp-controller="BusinessAndAchievements" asp-action="Employees"
+                           asp-route-departmentId="@departmentId"
+                           asp-route-timesOfEvaluationAndPerformanceId="@timesOfEvaluationAndPerformanceId"> الموظفين </a>
+                    </li>
 
+                    <li class="breadcrumb-item active">
+                        @employeeName
+                    </li>
                 </ol>
             </div>
         </div>
@@ -32,35 +43,40 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">
-                <i class="fas fa-calendar-alt"></i>
-                دورة قياس الأداء
+                <i class="fas fa-th-list"></i>
+                الدورات التدريبية
             </h3>
-            @if (User.IsInRole("Admin")|| User.IsInRole("Dean"))
+            @if (ViewBag.sycleStatus)
             {
-                <a asp-action="Create" class="btn  btn-primary  btn-sm text-white float-left m-0">
+                <a asp-action="Create"
+                   asp-route-employeeId="@employeeId"
+                   asp-route-timeOfId="@timesOfEvaluationAndPerformanceId" class="btn  btn-primary  btn-sm text-white float-left m-0">
                     <i class="fas fa-plus-circle"></i>
-                    اضافة دورة لقياس الأداء
+                    اضافة دورة تدريبية
                 </a>
             }
-            </div>
+
+
+
+        </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table tab-content table-striped table-bordered table-hover">
                     <thead>
-                        <tr>
+                        <tr class="text-center">
                             <th>#</th>
+
                             <th>
                                 @Html.DisplayNameFor(model => model.Title)
                             </th>
+
                             <th>
-                                @Html.DisplayNameFor(model => model.FromDate)
+                                @Html.DisplayNameFor(model => model.CourseDate)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.ToDate)
+                                @Html.DisplayNameFor(model => model.Degree)
                             </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Status)
-                            </th>
+
                             <th></th>
                         </tr>
                     </thead>
@@ -71,43 +87,32 @@
 
                             @foreach (var item in Model)
                             {
-                        <tr>
+                        <tr class="text-center">
                             <th>@i</th>
+
                             <td>
                                 @Html.DisplayFor(modelItem => item.Title)
                             </td>
+
                             <td>
-                                @Html.DisplayFor(modelItem => item.FromDate)
+                                @Html.DisplayFor(modelItem => item.CourseDate)
                             </td>
+
                             <td>
-                                @Html.DisplayFor(modelItem => item.ToDate)
+                                @Html.DisplayFor(modelItem => item.Degree)
                             </td>
+
+
                             <td>
-                                @if (item.Status)
+                                @if (ViewBag.sycleStatus)
                                 {
-                                    <span>منشور</span>
-                                }
-                                else
-                                {
+                                    <div class="btn-group">
 
-                                    <span>مؤرشف</span>
 
-                                }
-                            </td>
-
-                            <td>
-                                <div class="btn-group">
-                                    <a asp-action="Departments" asp-route-timesOfEvaluationAndPerformanceId="@item.Id" type="button" class="btn btn-primary ml-1" data-toggle="tooltip" data-placement="top" title="الوكالات / الإدارات">
-                                        <i class="fas fa-list-ol"></i>
-                                    </a>
-                                    @if (User.IsInRole("Admin") || User.IsInRole("Dean"))
-                                    {
-                                        <a asp-action="CycleReport" asp-route-id="@item.Id" type="button" class="btn btn-info ml-1">
-                                            <i class="fas fa-chart-pie"></i>
-                                        </a>
                                         <a asp-action="Edit" asp-route-id="@item.Id" type="button" class="btn btn-success ml-1">
                                             <i class="fas fa-edit"></i>
                                         </a>
+
 
 
                                         <form asp-action="Delete" asp-route-id="@item.Id">
@@ -124,15 +129,9 @@
                                                 </a>
                                             </span>
                                         </form>
-
-                                    }
-
-
-
-
-
                                     </div>
-                            </td>
+                                }
+                                </td>
                         </tr>
                                 i++;
                             }
@@ -140,7 +139,7 @@
                         else
                         {
                             <tr class="text-center">
-                                <td colspan="6">لاتوجد بيانات</td>
+                                <td colspan="8">لاتوجد بيانات</td>
                             </tr>
                         }
                     </tbody>
@@ -156,4 +155,3 @@
 
 </section>
 <!-- /.content -->
-

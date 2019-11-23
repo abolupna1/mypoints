@@ -20,11 +20,15 @@ namespace points.Controllers
     public class BusinessAndAchievementsController : Controller
     {
             private readonly IPointsRepository _repository;
+        private readonly ApplicationDbContext _context;
+
         private readonly IMapper _mapper;
 
-        public BusinessAndAchievementsController(IPointsRepository repository, IMapper mapper)
+        public BusinessAndAchievementsController(IPointsRepository repository, 
+            IMapper mapper, ApplicationDbContext context)
             {
                 _repository = repository;
+               _context = context;
             _mapper = mapper;
         }
 
@@ -50,13 +54,47 @@ namespace points.Controllers
                   ViewBag.timesOfEvaluationAndPerformanceId = timesOfEvaluationAndPerformanceId;
                  ViewBag.departmentId = departmentId;
             var employees = await _repository.GetEmployeesByDpartmentId(departmentId);
-                return View(employees);
+            var models = new List<EmployeeBusinessModelView>();
+            foreach (var emp in employees)
+            {
+                string sectionname = emp.SectionId != null ? emp.Section.Name : "لايوجد";
+                string unitname = emp.UnitId != null ? emp.Unit.Name : "لايوجد";
+                
+                string joptype = emp.JopType == true ? "اشرافية" : "غيراشرافية";
+                var model = new EmployeeBusinessModelView
+                {
+                    Id = emp.Id,
+                    Department=emp.Department.Name,
+                    Section= sectionname,
+                    Name=emp.Name,
+                    EmployeeNo=emp.EmployeeNo,
+                    JopName=emp.JopName,
+                    JopType=joptype,
+                    Mobile=emp.Mobile,
+                    Unit= unitname,
+                    BusinessAndAchievements=await _repository.GetBusinessAndAchievementByEmployeeIdAndTimeOfId(emp.Id, timesOf.Id),
+                    Courses= await _repository.CourseByEmployeeIdAndTimeOfId(emp.Id, timesOf.Id),
+                    Occasions=await _repository.GetEmployeeOccasionsInThisSicle(emp.Id, timesOf.Id),
+                    Evaluations = await _repository.GetEmployeeEvaluationsInThisSicle(emp.Id, timesOf.Id),
+                                        
+                };
+                models.Add(model);
+            }
+                return View(models);
             }
 
         [Route("WorksByEmployee/{employeeId:int}/{timesOfEvaluationAndPerformanceId:int}")]
         public async Task<IActionResult> WorksByEmployee(int employeeId, int timesOfEvaluationAndPerformanceId)
         {
+            var sycle = await _repository.GetTimesOfEvaluationAndPerformance(timesOfEvaluationAndPerformanceId);
+            if (sycle == null)
+            {
+                ViewBag.ErrorMessage = "لايوجد   بيانات";
+                return View("NotFound");
+            }
+            ViewBag.sycleStatus = sycle.Status;
             ViewBag.employeeId = employeeId;
+         
             var emploee = await _repository.GetEmployee(employeeId);
             ViewBag.departmentId = emploee != null ? emploee.DepartmentId : 0;
             ViewBag.employeeName = emploee != null ? emploee.Name : "";
@@ -68,8 +106,20 @@ namespace points.Controllers
         [Route("CreateGet")]
         public async Task<IActionResult> CreateGet(int employeeId, int countCreate, int departmentId, int timesOfEvaluationAndPerformanceId)
             {
-          
-                ViewBag.employeeId = employeeId;
+            var sycle = await _repository.GetTimesOfEvaluationAndPerformance(timesOfEvaluationAndPerformanceId);
+            if (sycle == null)
+            {
+                ViewBag.ErrorMessage = "لايوجد   بيانات";
+                return View("NotFound");
+            }
+            if (!sycle.Status)
+            {
+                ViewBag.ErrorMessage = "تمت ارشفة الدورة";
+                return View("NotFound");
+            }
+
+
+            ViewBag.employeeId = employeeId;
                 var emploee = await _repository.GetEmployee(employeeId);
                 ViewBag.employeeName = emploee != null ? emploee.Name : "";
                 ViewBag.departmentId = departmentId;
@@ -86,16 +136,21 @@ namespace points.Controllers
             [Route("Create")]
             public async Task<IActionResult> Create(List<BusinessAndAchievementCreateModelView> models)
             {
-                if (ModelState.IsValid)
+       
+            if (ModelState.IsValid)
                 {
                 var modelsMapper = _mapper.Map<List<BusinessAndAchievement>>(models);
                 int empId = 0;
                 int timeOf = 0;
+                var businesses = await _repository.GetBusinessAndAchievements();
+                int count = businesses.Count() + 1;
                 foreach (var model in modelsMapper)
                 {
+                    model.Id = count;
                     _repository.Add<BusinessAndAchievement>(model);
                     empId = model.EmployeeId;
                     timeOf = model.TimesOfEvaluationAndPerformanceId;
+                    count++;
                 }
                 await _repository.SavaAll();
                     return RedirectToAction("WorksByEmployee", new { employeeId=empId, timesOfEvaluationAndPerformanceId= timeOf });
@@ -114,6 +169,8 @@ namespace points.Controllers
                     ViewBag.ErrorMessage = "لايوجد   بيانات";
                     return View("NotFound");
                 }
+          
+         
             ViewBag.departmentId = timesOf.Employee.DepartmentId;
             ViewBag.employeeName = timesOf.Employee.Name;
               var modelsMapper = _mapper.Map<BusinessAndAchievementEditModelView>(timesOf);
@@ -216,13 +273,15 @@ namespace points.Controllers
             ViewBag.timesOfEvaluationAndPerformanceId = timesOf.Id;
             ViewBag.employeeId = employee.Id;
             ViewBag.employeeName = employee.Name;
-            return View(modelsMapper);
+            return View(modelsMapper.Where(b=>b.Status==null).ToList());
         }
 
 
         [HttpPost]
         [Route("AchieveAllBusiness/{employeeId:int}/{timesOfEvaluationAndPerformanceId:int}")]
-        public async Task<IActionResult> AchieveAllBusiness(int employeeId, int timesOfEvaluationAndPerformanceId , IList<AchieveAllBusinessModelView> models)
+        public async Task<IActionResult> AchieveAllBusiness(int employeeId, 
+                                        int timesOfEvaluationAndPerformanceId , 
+                                        IList<AchieveAllBusinessModelView> models)
         {
 
             var employee = await _repository.GetEmployee(employeeId);
@@ -261,19 +320,26 @@ namespace points.Controllers
             if (ModelState.IsValid)
             {
               
-                var modelsMapper = _mapper.Map<IList<BusinessAndAchievement>>(models);
-                foreach (var model in modelsMapper)
+                foreach (var model in models)
                 {
+
+                    var bu = await _repository.GetBusinessAndAchievement(model.Id);
+                    bu.Notes = model.Notes;
+                    bu.QuicklyPerformTheTask = model.QuicklyPerformTheTask;
+                    bu.Status = model.Status;
+                   
                     if (model.Status == 1)
                     {
-                        model.NotesForWorkDelayed = null;
+                        bu.NotesForWorkDelayed = null;
 
                     }
                     else
                     {
-                        model.QuicklyPerformTheTask = null;
+                        bu.QuicklyPerformTheTask = null;
                     }
-                    _repository.Update<BusinessAndAchievement>(model);
+
+                    _repository.Update<BusinessAndAchievement>(bu);
+
                 }
                 await _repository.SavaAll();
                 return RedirectToAction("WorksByEmployee", new { employeeId = employeeId, timesOfEvaluationAndPerformanceId = timesOfEvaluationAndPerformanceId });

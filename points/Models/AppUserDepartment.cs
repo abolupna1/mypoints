@@ -18,7 +18,9 @@ namespace points.Models
         public int UserId { get; set; }
         public AppUser User { get; set; }
 
+        [Display(Name = "الوكالة / الإدارة")]
         public int DepartmentId { get; set; }
+        [Display(Name = "الوكالة / الإدارة")]
         public Department Department { get; set; }
 
     }

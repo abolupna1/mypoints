@@ -10,8 +10,8 @@ using points.Data;
 namespace points.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191115153040_TimesOfEvaluationAndPerformance")]
-    partial class TimesOfEvaluationAndPerformance
+    [Migration("20191121010621_DbInit")]
+    partial class DbInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -172,6 +172,27 @@ namespace points.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("points.Models.AppUserDepartment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("UserId");
+
+                    b.Property<int>("DepartmentId");
+
+                    b.HasKey("Id", "UserId", "DepartmentId");
+
+                    b.HasAlternateKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AppUserDepartments");
+                });
+
             modelBuilder.Entity("points.Models.AppUserRole", b =>
                 {
                     b.Property<int>("UserId");
@@ -183,6 +204,70 @@ namespace points.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("points.Models.BusinessAndAchievement", b =>
+                {
+                    b.Property<int>("Id");
+
+                    b.Property<int>("EmployeeId");
+
+                    b.Property<int>("TimesOfEvaluationAndPerformanceId");
+
+                    b.Property<string>("Notes");
+
+                    b.Property<string>("NotesForWorkDelayed");
+
+                    b.Property<int?>("QuicklyPerformTheTask");
+
+                    b.Property<int?>("Status");
+
+                    b.Property<string>("TheWork")
+                        .IsRequired()
+                        .HasMaxLength(150);
+
+                    b.Property<string>("TheWorkDescription")
+                        .IsRequired();
+
+                    b.Property<DateTime>("WorkDate");
+
+                    b.HasKey("Id", "EmployeeId", "TimesOfEvaluationAndPerformanceId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("TimesOfEvaluationAndPerformanceId");
+
+                    b.ToTable("BusinessAndAchievements");
+                });
+
+            modelBuilder.Entity("points.Models.Course", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EmployeeId");
+
+                    b.Property<int>("TimesOfEvaluationAndPerformanceId");
+
+                    b.Property<DateTime>("CourseDate");
+
+                    b.Property<int>("Degree");
+
+                    b.Property<string>("Notce");
+
+                    b.Property<string>("Title")
+                        .IsRequired();
+
+                    b.HasKey("Id", "EmployeeId", "TimesOfEvaluationAndPerformanceId");
+
+                    b.HasAlternateKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("TimesOfEvaluationAndPerformanceId");
+
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("points.Models.Department", b =>
@@ -237,6 +322,81 @@ namespace points.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("points.Models.Evaluation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EmployeeId");
+
+                    b.Property<int>("TimesOfEvaluationAndPerformanceId");
+
+                    b.Property<int>("Degree");
+
+                    b.Property<int>("EvaluationCriteriaId");
+
+                    b.HasKey("Id", "EmployeeId", "TimesOfEvaluationAndPerformanceId");
+
+                    b.HasAlternateKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("EvaluationCriteriaId");
+
+                    b.HasIndex("TimesOfEvaluationAndPerformanceId");
+
+                    b.ToTable("Evaluations");
+                });
+
+            modelBuilder.Entity("points.Models.EvaluationCriteria", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CriteriaName")
+                        .IsRequired();
+
+                    b.Property<int>("Degree");
+
+                    b.Property<bool>("JopType");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EvaluationCriterias");
+                });
+
+            modelBuilder.Entity("points.Models.Occasion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EmployeeId");
+
+                    b.Property<int>("TimesOfEvaluationAndPerformanceId");
+
+                    b.Property<int>("Degree");
+
+                    b.Property<string>("Notce");
+
+                    b.Property<DateTime>("OccasionDate");
+
+                    b.Property<string>("Title")
+                        .IsRequired();
+
+                    b.HasKey("Id", "EmployeeId", "TimesOfEvaluationAndPerformanceId");
+
+                    b.HasAlternateKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("TimesOfEvaluationAndPerformanceId");
+
+                    b.ToTable("Occasions");
+                });
+
             modelBuilder.Entity("points.Models.Section", b =>
                 {
                     b.Property<int>("Id")
@@ -265,6 +425,9 @@ namespace points.Migrations
                     b.Property<DateTime>("FromDate");
 
                     b.Property<bool>("Status");
+
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.Property<DateTime>("ToDate");
 
@@ -328,6 +491,19 @@ namespace points.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("points.Models.AppUserDepartment", b =>
+                {
+                    b.HasOne("points.Models.Department", "Department")
+                        .WithMany("UserDepatrments")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("points.Models.AppUser", "User")
+                        .WithMany("UserDepatrments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("points.Models.AppUserRole", b =>
                 {
                     b.HasOne("points.Models.AppRole", "Role")
@@ -338,6 +514,32 @@ namespace points.Migrations
                     b.HasOne("points.Models.AppUser", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("points.Models.BusinessAndAchievement", b =>
+                {
+                    b.HasOne("points.Models.Employee", "Employee")
+                        .WithMany("BusinessAndAchievements")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("points.Models.TimesOfEvaluationAndPerformance", "TimesOfEvaluationAndPerformance")
+                        .WithMany("BusinessAndAchievements")
+                        .HasForeignKey("TimesOfEvaluationAndPerformanceId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("points.Models.Course", b =>
+                {
+                    b.HasOne("points.Models.Employee", "Employee")
+                        .WithMany("Courses")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("points.Models.TimesOfEvaluationAndPerformance", "TimesOfEvaluationAndPerformance")
+                        .WithMany("Courses")
+                        .HasForeignKey("TimesOfEvaluationAndPerformanceId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -355,6 +557,37 @@ namespace points.Migrations
                     b.HasOne("points.Models.Unit", "Unit")
                         .WithMany("Employees")
                         .HasForeignKey("UnitId");
+                });
+
+            modelBuilder.Entity("points.Models.Evaluation", b =>
+                {
+                    b.HasOne("points.Models.Employee", "Employee")
+                        .WithMany("Evaluations")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("points.Models.EvaluationCriteria", "EvaluationCriteria")
+                        .WithMany("Evaluations")
+                        .HasForeignKey("EvaluationCriteriaId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("points.Models.TimesOfEvaluationAndPerformance", "TimesOfEvaluationAndPerformance")
+                        .WithMany("Evaluations")
+                        .HasForeignKey("TimesOfEvaluationAndPerformanceId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("points.Models.Occasion", b =>
+                {
+                    b.HasOne("points.Models.Employee", "Employee")
+                        .WithMany("Occasions")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("points.Models.TimesOfEvaluationAndPerformance", "TimesOfEvaluationAndPerformance")
+                        .WithMany("Occasions")
+                        .HasForeignKey("TimesOfEvaluationAndPerformanceId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("points.Models.Section", b =>

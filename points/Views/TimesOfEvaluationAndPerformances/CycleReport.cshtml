@@ -1,0 +1,272 @@
+﻿@model points.ModelViews.Reports.CycleReportModelView
+@{
+    ViewData["Title"] = "  التقرير  ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var departmentId = @ViewBag.departmentId;
+    var timesOfEvaluationAndPerformanceId = @ViewBag.timesOfEvaluationAndPerformanceId;
+    var departmentName = @ViewBag.departmentName;
+}
+
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1> التقرير </h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item "><a asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                    <li class="breadcrumb-item "><a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Index">دورة قياس الأداء </a></li>
+                    <li class="breadcrumb-item active">
+                        تقرير عام 
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+
+    <div class="row">
+
+
+
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-chart-pie"></i>
+                         تقرير عام
+                    </h3>
+
+                </div>
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-12 col-md-12 col-lg-12 order-2 order-md-1">
+                            <div class="row">
+                                <div class="col-12 col-sm-4">
+                                    <div class="info-box bg-light">
+                                        <div class="info-box-content">
+                                            <span class="info-box-text text-center text-muted">جميع الأعمال </span>
+                                            <span class="info-box-number text-center text-muted mb-0">
+                                                @Model.Cyckle.BusinessAndAchievements.Count()
+
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-4">
+                                    <div class="info-box bg-light">
+                                        <div class="info-box-content">
+                                            <span class="info-box-text text-center text-muted">الأعمال الغير منجزة </span>
+                                            <span class="info-box-number text-center text-muted mb-0">
+                                                @Model.Cyckle.BusinessAndAchievements.Where(d => d.Status == null || d.Status > 1).Count()
+
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-4">
+                                    <div class="info-box bg-light">
+                                        <div class="info-box-content">
+                                            <span class="info-box-text text-center text-muted">الأعمال  المنجزة </span>
+                                            <span class="info-box-number text-center text-muted mb-0">
+                                                @Model.Cyckle.BusinessAndAchievements.Where(s => s.Status == 1).Count()
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6 mt-3">
+                                    <p class="text-center">
+                                        <strong>	سرعة اداء الأعمال </strong>
+                                    </p>
+
+                                    <div class="progress-group mb-5">
+                                        <span class="progress-text">سريع</span>
+                                        <span class="float-left">
+                                            @{
+                                                int acheveQuiq = Model.Cyckle.BusinessAndAchievements.Where(s => s.Status == 1 && s.QuicklyPerformTheTask == 3).Count();
+                                                int allQuiq = Model.Cyckle.BusinessAndAchievements.Where(s => s.Status == 1).Count();
+                                                double quiq = acheveQuiq > 0 ? (double)acheveQuiq / (double)allQuiq * 100 : 0;
+                                            }
+                                            @acheveQuiq /  <b>@allQuiq</b>
+
+                                        </span>
+
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-success" style="width: @quiq%"></div>
+                                        </div>
+                                    </div>
+                                    <!-- /.progress-group -->
+
+                                    <div class="progress-group mb-5">
+                                        <span class="progress-text">متوسط</span>
+                                        <span class="float-left">
+                                            @{
+                                                int achevemiddle = Model.Cyckle.BusinessAndAchievements.Where(s => s.Status == 1 && s.QuicklyPerformTheTask == 2).Count();
+                                                int allQmiddel = Model.Cyckle.BusinessAndAchievements.Where(s => s.Status == 1).Count();
+                                                double middel = achevemiddle > 0 ? (double)achevemiddle / (double)allQmiddel * 100 : 0;
+                                            }
+                                            @achevemiddle /  <b>@allQmiddel</b>
+                                        </span>
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-warning" style="width: @middel%"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- /.progress-group -->
+                                    <div class="progress-group">
+                                        <span class="progress-text">بطيئ</span>
+                                        <span class="float-left">
+                                            @{
+                                                int acheveweik = Model.Cyckle.BusinessAndAchievements.Where(s => s.Status == 1 && s.QuicklyPerformTheTask == 1).Count();
+                                                int allQweik = Model.Cyckle.BusinessAndAchievements.Where(s => s.Status == 1).Count();
+                                                double weik = 0;
+                                                if (acheveweik > 0)
+                                                {
+                                                    weik = (double)acheveweik / (double)allQweik * 100;
+                                                }
+                                            }
+                                            @acheveweik /  <b>@allQweik</b>
+                                        </span>
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-danger" style="width: @weik%"></div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+                                <div class="col-lg-6 mt-3">
+
+                                    <div class="col-12">
+                                        <div class="info-box">
+                                            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-chalkboard-teacher"></i></span>
+
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">الدورات التدريبية</span>
+                                                <span class="info-box-number">
+                                                    @Model.Cyckle.Courses.Count()
+                                                </span>
+                                            </div>
+
+                                            <!-- /.info-box-content -->
+                                        </div>
+                                        <!-- /.info-box -->
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="info-box">
+                                            <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-bullhorn"></i></span>
+
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">مناسبات العمادة</span>
+                                                <span class="info-box-number">
+                                                    @Model.Cyckle.Occasions.Count()
+                                                </span>
+                                            </div>
+
+                                            <!-- /.info-box-content -->
+                                        </div>
+                                        <!-- /.info-box -->
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="info-box">
+                                            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-fingerprint"></i></span>
+
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">التقييم</span>
+                                                <span class="info-box-number">
+                                                    <em> @Model.Cyckle.Evaluations.Sum(e => e.Degree)</em> /
+                                                    <strong> @Model.Cyckle.Evaluations.Sum(s => s.EvaluationCriteria.Degree)</strong>
+
+                                                </span>
+                                            </div>
+
+                                            <!-- /.info-box-content -->
+                                        </div>
+                                        <!-- /.info-box -->
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="text-center">
+                <tr>
+                    <th rowspan="2">#</th>
+                    <th rowspan="2">الاسم</th>
+                    <th rowspan="2">الإدارة</th>
+                    <th colspan="3">الاعمال</th>
+                    <th rowspan="2">دورات</th>
+                    <th rowspan="2">تقييم</th>
+                    <th rowspan="2">مناسبات</th>
+                    <th rowspan="2">النقاط</th>
+                </tr>
+                <tr>
+
+                    <th>الكل</th>
+                    <th>منجز</th>
+                    <th>لم ينجز</th>
+
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                @{ int i = 1;}
+                @foreach (var emp in Model.Employees)
+                {
+                <tr>
+                    <th>@i</th>
+                    <td>@emp.Name</td>
+                    <td>@emp.Department.Name</td>
+                    <td>@emp.BusinessAndAchievements.Where(d => d.TimesOfEvaluationAndPerformanceId == Model.Cyckle.Id).Count()</td>
+                    <td>@emp.BusinessAndAchievements.Where(d => d.TimesOfEvaluationAndPerformanceId == Model.Cyckle.Id && d.Status == 1).Count()</td>
+                    <td>@emp.BusinessAndAchievements.Where(d => d.TimesOfEvaluationAndPerformanceId == Model.Cyckle.Id && d.Status != 1).Count()</td>
+                    <td>@emp.Courses.Where(d => d.TimesOfEvaluationAndPerformanceId == Model.Cyckle.Id).Count()</td>
+                    <td>
+                        @emp.Evaluations.Where(d => d.TimesOfEvaluationAndPerformanceId == Model.Cyckle.Id).Sum(d => d.Degree)
+                        /
+                        <strong>
+                            @emp.Evaluations.Where(d => d.TimesOfEvaluationAndPerformanceId == Model.Cyckle.Id).Sum(d => d.EvaluationCriteria.Degree)
+                        </strong>
+                    </td>
+                    <td>@emp.Occasions.Where(d => d.TimesOfEvaluationAndPerformanceId == Model.Cyckle.Id).Count()</td>
+                    <td>
+                        @{
+                            int mypoint = 0;
+                            mypoint += emp.BusinessAndAchievements.Where(d=>d.QuicklyPerformTheTask!=null).Sum(b => b.QuicklyPerformTheTask.Value);
+                            mypoint += emp.Courses.Sum(c => c.Degree);
+                            mypoint += emp.Occasions.Sum(o => o.Degree);
+                            mypoint += emp.Evaluations.Sum(e => e.Degree);
+                        }
+                        @mypoint
+                    </td>
+                </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+<!-- /.content -->

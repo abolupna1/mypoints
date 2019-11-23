@@ -9,7 +9,7 @@ namespace points.Models
 {
     public class BusinessAndAchievement
     {
-      
+       
         public int Id { get; set; }
 
 

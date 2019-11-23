@@ -3,6 +3,7 @@ using points.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace points.ModelViews.BusinessAndAchievements
 {
     public class AchieveAllBusinessModelView
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Display(Name = "الموظف")]
         public int EmployeeId { get; set; }

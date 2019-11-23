@@ -52,6 +52,8 @@
                 <i class="fas fa-th-list"></i>
                 الأعمال
             </h3>
+            @if (ViewBag.sycleStatus)
+            {
             @if (Model.Any())
             {
                 <a class="float-left btn btn-success mr-2 text-white"
@@ -84,7 +86,7 @@
                 </span>
             </form>
 
-
+            }
 
 
         </div>
@@ -188,36 +190,39 @@
                             </td>
 
                             <td>
-                                <div class="btn-group">
-                                    <a class="float-left btn btn-primary ml-2 text-white"
-                                       asp-action="AchieveSingleBusiness"
-                                       asp-route-id="@item.Id">
-                                        <i class="fas fa-trophy"></i>
-                                    </a>
-                                    @if (item.Status == null)
-                                    {
-                                        <a asp-action="Edit" asp-route-id="@item.Id" type="button" class="btn btn-success ml-1">
-                                            <i class="fas fa-edit"></i>
+                                @if (ViewBag.sycleStatus)
+                                {
+                                    <div class="btn-group">
+                                        <a class="float-left btn btn-primary ml-2 text-white"
+                                           asp-action="AchieveSingleBusiness"
+                                           asp-route-id="@item.Id">
+                                            <i class="fas fa-trophy"></i>
                                         </a>
-                                    }
-
-
-                                    <form asp-action="Delete" asp-route-id="@item.Id">
-                                        <span id="confirmDeleteSpan_@item.Id" style="display:none">
-                                            <span>هل تريد الحذف ؟</span>
-                                            <button type="submit" class="btn btn-danger">نعم</button>
-                                            <a href="#" class="btn btn-primary"
-                                               onclick="confirmDelete('@item.Id', false)">لا</a>
-                                        </span>
-                                        <span id="deleteSpan_@item.Id">
-                                            <a href="#" class="btn btn-danger"
-                                               onclick="confirmDelete('@item.Id', true)">
-                                                <i class="fas fa-trash"></i>
+                                        @if (item.Status == null)
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.Id" type="button" class="btn btn-success ml-1">
+                                                <i class="fas fa-edit"></i>
                                             </a>
-                                        </span>
-                                    </form>
-                                </div>
-                            </td>
+                                        }
+
+
+                                        <form asp-action="Delete" asp-route-id="@item.Id">
+                                            <span id="confirmDeleteSpan_@item.Id" style="display:none">
+                                                <span>هل تريد الحذف ؟</span>
+                                                <button type="submit" class="btn btn-danger">نعم</button>
+                                                <a href="#" class="btn btn-primary"
+                                                   onclick="confirmDelete('@item.Id', false)">لا</a>
+                                            </span>
+                                            <span id="deleteSpan_@item.Id">
+                                                <a href="#" class="btn btn-danger"
+                                                   onclick="confirmDelete('@item.Id', true)">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </span>
+                                        </form>
+                                    </div>
+                                }
+                                </td>
                         </tr>
                                 i++;
                             }

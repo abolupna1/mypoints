@@ -10,11 +10,12 @@ using Microsoft.EntityFrameworkCore;
 using points.Data;
 using points.Data.Repositories;
 using points.Models;
+using points.ModelViews.Reports;
 
 namespace points.Controllers
 {
     [Route("TimesOfEvaluationAndPerformances")]
-    
+   
     public class TimesOfEvaluationAndPerformancesController : Controller
     {
         private readonly IPointsRepository _repository;
@@ -24,13 +25,16 @@ namespace points.Controllers
             _repository = repository;
         }
 
+
         
+
 
 
         public async Task<IActionResult> Index()
         {
             return View(await _repository.GetTimesOfEvaluationAndPerformances());
         }
+
 
         [Route("Departments/{timesOfEvaluationAndPerformanceId:int}")]
         public async Task<IActionResult> Departments(int timesOfEvaluationAndPerformanceId)
@@ -47,10 +51,11 @@ namespace points.Controllers
             return View(departments);
         }
 
-        [Route("Details/{id:int}")]
-        public async Task<IActionResult> Details(int id)
-        {
+        [Route("CycleReport/{id:int}")]
 
+        [Authorize(Roles = "Dean,Admin")]
+        public async Task<IActionResult> CycleReport(int id)
+        {
 
             var timesOf = await _repository.GetTimesOfEvaluationAndPerformance(id);
             if (timesOf == null)
@@ -58,11 +63,46 @@ namespace points.Controllers
                 ViewBag.ErrorMessage = "لايوجد   بيانات";
                 return View("NotFound");
             }
-
-            return View(timesOf);
+            var model = new CycleReportModelView
+            {
+                Cyckle = timesOf,
+                Employees=await _repository.GetEmployees()
+            };
+            return View(model);
         }
+        [Route("ReportByDepartment/{departmentId:int}/{timeOfId:int}")]
+        public async Task<IActionResult> ReportByDepartment(int departmentId,int timeOfId)
+        {
+            var timesOf = await _repository.GetTimesOfEvaluationAndPerformance(timeOfId);
+            var department = await _repository.GetDepartment(departmentId);
+            if (timesOf == null || department==null)
+            {
+                ViewBag.ErrorMessage = "لايوجد   بيانات";
+                return View("NotFound");
+            }
+            
+             
 
+            var model = new DepartmentReportModelView
+            {
+                Name = department.Name,
+                BusinessAndAchievements= await _repository.GetDepartmentBusinessInThisSicle(department.Id, timesOf.Id),
+                Occasions= await _repository.GetDepartmentOccasionsInThisSicle(department.Id, timesOf.Id),
+                Evaluations = await _repository.GetDepartmentEvaluationsInThisSicle(department.Id, timesOf.Id),
+                Courses = await _repository.GetDepartmentCoursesInThisSicle(department.Id, timesOf.Id),
+                
+            };
+            ViewBag.departmentId = department.Id;
+            ViewBag.timesOfEvaluationAndPerformanceId = timesOf.Id;
+            ViewBag.departmentName = department.Name;
+
+
+
+            return View(model);
+        }
+      
         [Route("Create")]
+        [Authorize(Roles = "Dean,Admin")]
         public IActionResult Create()
         {
             return View();
@@ -72,6 +112,7 @@ namespace points.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Create")]
+        [Authorize(Roles = "Dean,Admin")]
         public async Task<IActionResult> Create([Bind("Id,Title,FromDate,ToDate,Status")] TimesOfEvaluationAndPerformance timesOf)
         {
             if (ModelState.IsValid)
@@ -84,6 +125,7 @@ namespace points.Controllers
         }
 
         [Route("Edit/{id:int}")]
+        [Authorize(Roles = "Dean,Admin")]
         public async Task<IActionResult> Edit(int id)
         {
 
@@ -102,6 +144,7 @@ namespace points.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Edit/{id:int}")]
+        [Authorize(Roles = "Dean,Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,FromDate,ToDate,Status")]
         TimesOfEvaluationAndPerformance timesOf)
         {
@@ -141,6 +184,7 @@ namespace points.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Delete/{id:int}")]
+        [Authorize(Roles = "Dean,Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var timesOf = await _repository.GetTimesOfEvaluationAndPerformance(id);

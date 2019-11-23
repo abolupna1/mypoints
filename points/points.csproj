@@ -7,35 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20191111222857_initialDb.cs" />
-    <Compile Remove="Migrations\20191111222857_initialDb.Designer.cs" />
-    <Compile Remove="Migrations\20191113114750_Department.cs" />
-    <Compile Remove="Migrations\20191113114750_Department.Designer.cs" />
-    <Compile Remove="Migrations\20191113230101_Employee.cs" />
-    <Compile Remove="Migrations\20191113230101_Employee.Designer.cs" />
-    <Compile Remove="Migrations\20191114002900_setNullSection.cs" />
-    <Compile Remove="Migrations\20191114002900_setNullSection.Designer.cs" />
-    <Compile Remove="Migrations\20191114003352_setNullSection.cs" />
-    <Compile Remove="Migrations\20191114003352_setNullSection.Designer.cs" />
-    <Compile Remove="Migrations\20191114003702_setNullSection.cs" />
-    <Compile Remove="Migrations\20191114003702_setNullSection.Designer.cs" />
-    <Compile Remove="Migrations\20191114003820_setNullSection.cs" />
-    <Compile Remove="Migrations\20191114003820_setNullSection.Designer.cs" />
-    <Compile Remove="Migrations\20191114004202_setNullSection.cs" />
-    <Compile Remove="Migrations\20191114004202_setNullSection.Designer.cs" />
-    <Compile Remove="Migrations\20191114004549_setNullSection.cs" />
-    <Compile Remove="Migrations\20191114004549_setNullSection.Designer.cs" />
-    <Compile Remove="Migrations\20191115152921_TimesOfEvaluationAndPerformance.cs" />
-    <Compile Remove="Migrations\20191115152921_TimesOfEvaluationAndPerformance.Designer.cs" />
-    <Compile Remove="Migrations\20191115233935_AppUserDepartments.cs" />
-    <Compile Remove="Migrations\20191115233935_AppUserDepartments.Designer.cs" />
-    <Compile Remove="Migrations\20191116012134_AppUserDepartmentsUpdated.cs" />
-    <Compile Remove="Migrations\20191116012134_AppUserDepartmentsUpdated.Designer.cs" />
-    <Compile Remove="Migrations\20191116012257_AppUserDepartmentsUpdated.cs" />
-    <Compile Remove="Migrations\20191116012257_AppUserDepartmentsUpdated.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\lib\datepicker\datepicker-ar.js" />
     <None Include="wwwroot\lib\datepicker\hijricalendar.js" />
     <None Include="wwwroot\lib\datepicker\jquery-ui.min.js" />

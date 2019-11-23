@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using points.Models;
-namespace points.ModelViews.Employees
+namespace points.ModelViews.BusinessAndAchievements
 {
     public class EmployeeBusinessModelView
     {
@@ -28,7 +28,7 @@ namespace points.ModelViews.Employees
 
 
 
-            [Display(Name = "الوكالة / الإدارة"), Required(ErrorMessage = "{0} مطلوب")]
+            [Display(Name = "الوكالة / الإدارة")]
             public string Department { get; set; }
 
 
@@ -39,8 +39,14 @@ namespace points.ModelViews.Employees
             [Display(Name = "الوحدة")]
             public string Unit { get; set; } = null;
 
-            public IEnumerable<BusinessAndAchievement> BusinessAndAchievements { get; set; }
-        
+        [Display(Name = "الوحدة")]
+        public int MyPoints { get; set; } = 0;
+
+        public IEnumerable<BusinessAndAchievement> BusinessAndAchievements { get; set; }
+            public IEnumerable<Course> Courses { get; set; }
+            public IEnumerable<Occasion> Occasions { get; set; }
+            public IEnumerable<Evaluation> Evaluations { get; set; }
+
 
     }
 }

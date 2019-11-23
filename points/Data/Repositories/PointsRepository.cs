@@ -21,6 +21,13 @@ namespace points.Data.Repositories
             _context.Add(entity);
         }
 
+        public async Task<IEnumerable<Course>> CourseByEmployeeIdAndTimeOfId(int employeeId, int timesOfId)
+        {
+            return await _context.Courses
+                .Where(c => c.EmployeeId == employeeId && c.TimesOfEvaluationAndPerformanceId == timesOfId)
+                .ToListAsync();
+        }
+
         public void Delete<T>(T entity) where T : class
         {
             _context.Remove(entity);
@@ -46,10 +53,44 @@ namespace points.Data.Repositories
                 .ToListAsync();
         }
 
+        public async Task<Course> GetCourse(int id)
+        {
+            return await _context.Courses.SingleOrDefaultAsync(c=>c.Id==id);
+        }
+
         public async Task<Department> GetDepartment(int id)
         {
             return  await _context.Departments.SingleOrDefaultAsync(d=>d.Id==id);
             
+        }
+
+        public async Task<IEnumerable<BusinessAndAchievement>> GetDepartmentBusinessInThisSicle(int departmentId, int timeOfId)
+        {
+            return await _context.BusinessAndAchievements.
+                Where(e => e.Employee.DepartmentId == departmentId && e.TimesOfEvaluationAndPerformanceId == timeOfId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Occasion>> GetDepartmentOccasionsInThisSicle(int departmentId, int timeOfId)
+        {
+            return await _context.Occasions.
+                Where(e => e.Employee.DepartmentId == departmentId && e.TimesOfEvaluationAndPerformanceId == timeOfId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Evaluation>> GetDepartmentEvaluationsInThisSicle(int departmentId, int timeOfId)
+        {
+            return await _context.Evaluations.
+                Where(e => e.Employee.DepartmentId == departmentId && e.TimesOfEvaluationAndPerformanceId == timeOfId)
+                .Include(e=>e.EvaluationCriteria)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Course>> GetDepartmentCoursesInThisSicle(int departmentId, int timeOfId)
+        {
+            return await _context.Courses.
+                Where(e => e.Employee.DepartmentId == departmentId && e.TimesOfEvaluationAndPerformanceId == timeOfId)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Department>> GetDepartments()
@@ -69,12 +110,38 @@ namespace points.Data.Repositories
                .SingleOrDefaultAsync(e=>e.Id==id);
         }
 
+        public async Task<IEnumerable<Course>> GetEmployeeCoursesInThisSicle(int employeeId, int timeOfId)
+        {
+            return await _context.Courses
+                .Where(d => d.EmployeeId == employeeId && d.TimesOfEvaluationAndPerformanceId == timeOfId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Evaluation>> GetEmployeeEvaluationsInThisSicle(int employeeId, int timeOfId)
+        {
+            return await _context.Evaluations
+                .Where(e => e.EmployeeId == employeeId && e.TimesOfEvaluationAndPerformanceId == timeOfId)
+                .Include(e=>e.EvaluationCriteria)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Occasion>> GetEmployeeOccasionsInThisSicle(int employeeId, int timeOfId)
+        {
+            return await _context.Occasions
+                .Where(o => o.EmployeeId == employeeId && o.TimesOfEvaluationAndPerformanceId == timeOfId)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Employee>> GetEmployees()
         {
             return await _context.Employees
                 .Include(d => d.Department)
                 .Include(s=>s.Section)
                 .Include(u=>u.Unit)
+                .Include(b => b.BusinessAndAchievements)
+                .Include(c => c.Courses)
+                .Include(o => o.Occasions)
+                .Include(e => e.Evaluations).ThenInclude(e=>e.EvaluationCriteria)
                 .ToListAsync();
         }
 
@@ -83,6 +150,35 @@ namespace points.Data.Repositories
             return await _context.Employees.Where(d => d.DepartmentId == deprtmintId)
                 .Include(s=>s.Section).Include(u=>u.Unit).Include(d=>d.Department)
                 .ToListAsync();
+        }
+
+        public async Task<Evaluation> GetEvaluation(int id)
+        {
+            return await _context.Evaluations.SingleOrDefaultAsync(e=>e.Id==id);
+        }
+
+        public async Task<EvaluationCriteria> GetEvaluationCriteria(int id)
+        {
+            return await _context.EvaluationCriterias.SingleOrDefaultAsync(e=>e.Id==id);
+        }
+
+        public async Task<IEnumerable<EvaluationCriteria>> GetEvaluationCriterias()
+        {
+            return await _context.EvaluationCriterias.OrderBy(o=>o.JopType).ToListAsync();
+        }
+
+
+
+        public async Task<IEnumerable<EvaluationCriteria>> GetEvaluationCriteriasByJopType(bool? jopType)
+        {
+            return await _context.EvaluationCriterias.Where(e => e.JopType == jopType)
+            .ToListAsync();
+
+        }
+
+        public async Task<Occasion> GetOccasion(int id)
+        {
+            return await _context.Occasions.SingleOrDefaultAsync(o=>o.Id==id);
         }
 
         public async Task<Section> GetSection(int id)
@@ -102,7 +198,12 @@ namespace points.Data.Repositories
 
         public async  Task<TimesOfEvaluationAndPerformance> GetTimesOfEvaluationAndPerformance(int id)
         {
-            return await _context.TimesOfEvaluationAndPerformances.SingleOrDefaultAsync(t=>t.Id==id);
+            return await _context.TimesOfEvaluationAndPerformances
+                .Include(b=>b.BusinessAndAchievements)
+                .Include(c=>c.Courses)
+                .Include(o=>o.Occasions)
+                .Include(e=>e.Evaluations)
+                .SingleOrDefaultAsync(t=>t.Id==id);
         }
 
         public async Task<IEnumerable<TimesOfEvaluationAndPerformance>> GetTimesOfEvaluationAndPerformances()
@@ -161,12 +262,21 @@ namespace points.Data.Repositories
 
         public async Task<bool> SavaAll()
         {
+           
             return await _context.SaveChangesAsync() > 0;
         }
 
         public void Update<T>(T entity) where T : class
         {
+         
             _context.Update(entity);
         }
+
+        public async Task<IEnumerable<BusinessAndAchievement>> GetBusinessAndAchievements()
+        {
+            return await _context.BusinessAndAchievements.ToListAsync();
+        }
+
+    
     }
 }

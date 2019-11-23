@@ -41,8 +41,9 @@ namespace points
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+
+            options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
             services.AddIdentity<AppUser, AppRole>(options => {
 
                 options.User.RequireUniqueEmail = false;

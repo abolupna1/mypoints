@@ -1,0 +1,123 @@
+﻿@model Course
+
+@{
+    ViewData["Title"] = " تعديل دورة تدريبية  ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var departmentId = @ViewBag.departmentId;
+    var timesOfEvaluationAndPerformanceId = @ViewBag.timesOfEvaluationAndPerformanceId;
+    var employeeId = @ViewBag.employeeId;
+    var employeeName = @ViewBag.employeeName;
+}
+
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>الدورات التدريبية</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item "><a asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                    <li class="breadcrumb-item "><a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Index">دورة قياس الأداء </a></li>
+                    <li class="breadcrumb-item "><a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Departments" asp-route-timesOfEvaluationAndPerformanceId="@ViewBag.timesOfEvaluationAndPerformanceId">الوكالات - الإدارات</a></li>
+                    <li class="breadcrumb-item ">
+                        <a asp-controller="BusinessAndAchievements" asp-action="Employees"
+                           asp-route-departmentId="@departmentId"
+                           asp-route-timesOfEvaluationAndPerformanceId="@timesOfEvaluationAndPerformanceId"> الموظفين </a>
+                    </li>
+                    <li class="breadcrumb-item ">
+                        <a asp-controller="BusinessAndAchievements"
+                           asp-action="WorksByEmployee" asp-route-employeeId="@employeeId"
+                           asp-route-timesOfEvaluationAndPerformanceId="@timesOfEvaluationAndPerformanceId">
+                            @employeeName
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item active">
+                        تعديل دورة تدريبية
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-edit"></i>
+                تعديل دورة تدريبية
+            </h3>
+
+
+
+
+        </div>
+        <div class="card-body">
+
+            <form asp-action="Edit">
+                <input asp-for="Id" hidden type="hidden"/>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group" hidden>
+                    <label hidden asp-for="EmployeeId" class="control-label"></label>
+                    <input type="hidden" hidden asp-for="EmployeeId" class="form-control" value="@employeeId">
+                </div>
+                <div class="form-group" hidden>
+                    <label hidden asp-for="TimesOfEvaluationAndPerformanceId" class="control-label"></label>
+                    <input type="hidden" hidden asp-for="TimesOfEvaluationAndPerformanceId" class="form-control" value="@timesOfEvaluationAndPerformanceId">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CourseDate" class="control-label"></label>
+                    <input type="text" asp-for="CourseDate" id="CourseDate" class="form-control" />
+                    <span asp-validation-for="CourseDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Notce" class="control-label"></label>
+                    <textarea asp-for="Notce" class="form-control"> </textarea>
+                    <span asp-validation-for="Notce" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="حفظ" class="btn btn-primary" />
+                </div>
+            </form>
+
+
+        </div>
+
+        <!-- /.card-body -->
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+
+        $(document).ready(function () {
+            $("#CourseDate").datepicker();
+
+        });
+    </script>
+}
+
+
+
+
+

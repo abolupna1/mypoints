@@ -47,5 +47,8 @@ namespace points.Models
 
 
         public IEnumerable<BusinessAndAchievement> BusinessAndAchievements { get; set; }
+        public IEnumerable<Course> Courses { get; set; }
+        public IEnumerable<Occasion> Occasions { get; set; }
+        public IEnumerable<Evaluation> Evaluations { get; set; }
     }
 }

@@ -1,0 +1,157 @@
+﻿@model IEnumerable<Evaluation>
+@{
+    ViewData["Title"] = "  التقييم  ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var departmentId = @ViewBag.departmentId;
+    var timesOfEvaluationAndPerformanceId = @ViewBag.timesOfEvaluationAndPerformanceId;
+    var employeeId = @ViewBag.employeeId;
+    var employeeName = @ViewBag.employeeName;
+}
+
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1> التقييم </h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item "><a asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                    <li class="breadcrumb-item "><a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Index">دورة قياس الأداء </a></li>
+                    <li class="breadcrumb-item "><a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Departments" asp-route-timesOfEvaluationAndPerformanceId="@ViewBag.timesOfEvaluationAndPerformanceId">الوكالات - الإدارات</a></li>
+                    <li class="breadcrumb-item ">
+                        <a asp-controller="BusinessAndAchievements" asp-action="Employees"
+                           asp-route-departmentId="@departmentId"
+                           asp-route-timesOfEvaluationAndPerformanceId="@timesOfEvaluationAndPerformanceId"> الموظفين </a>
+                    </li>
+
+                    <li class="breadcrumb-item active">
+                        @employeeName
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-th-list"></i>
+                التقييم
+            </h3>
+            @if (ViewBag.sycleStatus)
+            {
+            @if (!Model.Any())
+            {
+                <a asp-action="Create"
+                   asp-route-employeeId="@employeeId"
+                   asp-route-timeOfId="@timesOfEvaluationAndPerformanceId" class="btn  btn-primary  btn-sm text-white float-left m-0">
+                    <i class="fas fa-plus-circle"></i>
+                    اضافة تقييم
+                </a>
+            }
+            else
+            {
+        <form asp-action="Delete" class="float-left" asp-route-employeeId="@employeeId"
+              asp-route-timeOfId="@timesOfEvaluationAndPerformanceId">
+            <div class="btn-group">
+                <span id="confirmDeleteSpan_99" style="display:none">
+                    <span>هل تريد الحذف ؟</span>
+                    <button type="submit" class="btn btn-danger">نعم</button>
+                    <a href="#" class="btn btn-primary"
+                       onclick="confirmDelete('99', false)">لا</a>
+                </span>
+                <span id="deleteSpan_99">
+                    <a href="#" class="btn btn-danger"
+                       onclick="confirmDelete('99', true)">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </span>
+                <a asp-action="Edit"
+                   asp-route-employeeId="@employeeId"
+                   asp-route-timeOfId="@timesOfEvaluationAndPerformanceId" class="btn mr-2 btn-primary  btn-sm text-white float-left m-0">
+                    <i class="fas fa-edit"></i>
+                    تعديل التقييم
+                </a>
+            </div>
+        </form>
+
+            }
+
+            }
+
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table tab-content table-striped table-bordered table-hover">
+                    <thead>
+                        <tr class="text-center">
+                            <th>#</th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.EvaluationCriteria.CriteriaName)
+                            </th>
+
+           
+                            <th>
+                                @Html.DisplayNameFor(model => model.Degree)
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            int i = 1;
+
+                            @foreach (var item in Model)
+                            {
+                                <tr class="text-center">
+                                    <th>@i</th>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EvaluationCriteria.CriteriaName)
+                                    </td>
+
+
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Degree)
+                                    </td>
+
+                                </tr>
+                                i++;
+                            }
+
+                            <tr class="text-center">
+                                <th class="text-left" colspan="2">المجموع</th>
+                                <th> @Model.Sum(s=>s.Degree)</th>
+                            </tr>
+
+                        }
+                        else
+                        {
+                            <tr class="text-center">
+                                <td colspan="8">لاتوجد بيانات</td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+        <!-- /.card-body -->
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->

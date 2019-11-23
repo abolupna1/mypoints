@@ -34,8 +34,17 @@
         <nav class="main-header navbar navbar-expand bg-primary navbar-light border-bottom">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
+
                 <li class="nav-item">
+
                     <a class="nav-link" data-widget="pushmenu" href="#"><i class="fa fa-bars"></i></a>
+                </li>
+
+            </ul>
+            <ul class="navbar-nav ">
+
+                <li class="nav-item text-warning">
+                    نسخة تجريبية 0.1
                 </li>
 
             </ul>
@@ -71,9 +80,7 @@
                     <div>
                         <!-- Sidebar user panel (optional) -->
                         <div class="user-panel mt-3 pb-3 mb-3 d-flex text-center">
-                            <div class="image">
-                                <img src="https://secure.gravatar.com/avatar/5ffa2a1ffeb767c60ab7e1052e385d5c?s=52&d=mm&r=g" class="img-circle elevation-2" alt="User Image">
-                            </div>
+                         
                             <div class="info">
 
 
@@ -96,64 +103,67 @@
                         <nav class="mt-2">
                             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                                 <!-- Add icons to the links using the .nav-icon class
-                            with font-awesome or any other icon font library -->
-                                <li class="nav-item has-treeview">
-                                    <a href="#" class="nav-link active">
-                                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                                        <p>
-                                            ادارة النظام
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview" style="display: none;">
-                                        <li class="nav-item">
-                                            <a asp-controller="AppUsers" asp-action="Index" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>المستخدمين</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="./index2.html" class="nav-link active">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>الضبط </p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a asp-controller="Departments" asp-action="Index" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>الوكالات / الإدارات</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a asp-controller="Sections" asp-action="Index" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>الأقسام</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a asp-controller="Units" asp-action="Index" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>الوحدات</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a asp-controller="Employees" asp-action="Index" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>الموظفين</p>
-                                            </a>
-                                        </li>
+    with font-awesome or any other icon font library -->
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li class="nav-item has-treeview">
+                                        <a href="#" class="nav-link active">
+                                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                                            <p>
+                                                ادارة النظام
+                                                <i class="right fas fa-angle-left"></i>
+                                            </p>
+                                        </a>
+                                        <ul class="nav nav-treeview" style="display: none;">
+                                            <li class="nav-item">
+                                                <a asp-controller="AppUsers" asp-action="Index" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>المستخدمين</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a asp-controller="EvaluationCriterias" asp-action="Index" class="nav-link active">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>معايير التقييم </p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a asp-controller="Departments" asp-action="Index" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>الوكالات / الإدارات</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a asp-controller="Sections" asp-action="Index" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>الأقسام</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a asp-controller="Units" asp-action="Index" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>الوحدات</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a asp-controller="Employees" asp-action="Index" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>الموظفين</p>
+                                                </a>
+                                            </li>
 
-                                    </ul>
+                                        </ul>
 
-                                </li>
-                                <li class="nav-header">الأداء والتقييم</li>
-                                <li class="nav-item">
-                                    <a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Index" class="nav-link">
-                                        <i class="nav-icon far fa-calendar-alt"></i>
-                                        <p>دورة قياس الأداء</p>
-                                    </a>
-                                </li>
-                            </ul>
+                                    </li>
+                                }
+                                    <li class="nav-header">الأداء والتقييم</li>
+                                    <li class="nav-item">
+                                        <a asp-controller="TimesOfEvaluationAndPerformances" asp-action="Index" class="nav-link">
+                                            <i class="nav-icon far fa-calendar-alt"></i>
+                                            <p>دورة قياس الأداء</p>
+                                        </a>
+                                    </li>
+                                </ul>
 
                         </nav>
                         <!-- /.sidebar-menu -->
